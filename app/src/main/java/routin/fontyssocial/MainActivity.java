@@ -11,7 +11,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity
@@ -90,7 +89,7 @@ public class MainActivity extends AppCompatActivity
         FragmentManager fragmentManager = getFragmentManager();
 
         if (id == R.id.nav_map) {
-            fragmentManager.beginTransaction().replace(R.id.content_frame, new MapFragment()).commit();
+            fragmentManager.beginTransaction().replace(R.id.content_frame, new MapappFragment()).commit();
         } else if (id == R.id.nav_notifications) {
             fragmentManager.beginTransaction().replace(R.id.content_frame, new NotificationsFragment()).commit();
         } else if (id == R.id.nav_friends) {
