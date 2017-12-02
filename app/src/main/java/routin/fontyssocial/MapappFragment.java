@@ -46,7 +46,7 @@ public class MapappFragment extends Fragment implements OnMapReadyCallback {
         }
 
         // Test of our custom method to add a marker
-        this.addMarker(0.0, 0.0, "Test");
+        this.addMarker(51.451325, 5.476467, "Test");
     }
 
     public Marker addMarker(double latitude, double longitude, String name){
