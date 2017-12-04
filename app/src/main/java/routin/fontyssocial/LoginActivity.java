@@ -37,8 +37,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
     private Account[] getAccounts(){
-        Account[] accounts = AccountManager.get(context).getAccounts();
-        return accounts;
+        return AccountManager.get(context).getAccounts();
     }
     private void addAdapterToViews() {
 
