@@ -52,9 +52,12 @@ public class LoginActivity extends AppCompatActivity {
         LoginActivity.context = getApplicationContext();
         mail_account = findViewById(R.id.email);
         password = findViewById(R.id.password);
-        addAdapterToViews();
         //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
+        addAdapterToViews();
+
+
+
         FirebaseUser u=auth.getCurrentUser();
         if (auth.getCurrentUser() != null) {
             startActivity(new Intent(LoginActivity.this, MainActivity.class));
