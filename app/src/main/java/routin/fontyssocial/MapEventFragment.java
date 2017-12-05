@@ -1,16 +1,20 @@
 package routin.fontyssocial;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +29,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import static android.content.Context.LOCATION_SERVICE;
 
-public class MapappFragment extends Fragment implements OnMapReadyCallback {
+public class MapEventFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap mMap;
     private LocationManager mLocationManager;
     private Marker mLocationMarker = null;
@@ -33,12 +37,8 @@ public class MapappFragment extends Fragment implements OnMapReadyCallback {
 
     private final LocationListener mLocationListener = new LocationListener() {
         @Override
-        public void onLocationChanged(Location location) {
-//            if (mLocationMarker != null) {
-//                mLocationMarker.remove();
-//            }
-//            mLocationMarker = addMarker(location.getLatitude(), location.getLongitude(), "My location");
-//            mLocation = location;
+        public void onLocationChanged(final Location location) {
+            mLocation = location;
         }
 
         @Override
@@ -57,7 +57,7 @@ public class MapappFragment extends Fragment implements OnMapReadyCallback {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_mapapp, container, false);
+        View view = inflater.inflate(R.layout.fragment_map_event, container, false);
 
         MapFragment mapFragment = (MapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -82,13 +82,14 @@ public class MapappFragment extends Fragment implements OnMapReadyCallback {
             // Location must be enabled
         } else {
             mMap.setMyLocationEnabled(true);
+            this.zoomToPosition();
         }
 
         // Test of our custom method to add a marker
-        this.addMarker(51.441642, 5.4697225, "Eindhoven");
+        //this.addMarker(51.441642, 5.4697225, "Eindhoven");
     }
 
-    private void alertDialog(String title, String content, String validation){
+    private void alertDialog(String title, String content, String validation) {
         AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
         alertDialog.setTitle(title);
         alertDialog.setMessage(content);
@@ -101,14 +102,32 @@ public class MapappFragment extends Fragment implements OnMapReadyCallback {
         alertDialog.show();
     }
 
-    public Marker addMarker(double latitude, double longitude, String name){
+    public Marker addMarker(double latitude, double longitude, String text) {
         LatLng position;
         Marker marker;
 
         position = new LatLng(latitude, longitude);
-        marker = mMap.addMarker(new MarkerOptions().position(position).title(name));
+        marker = mMap.addMarker(new MarkerOptions().position(position).title(text));
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(position, 15));
 
         return marker;
+    }
+
+    public Marker addMarker(LatLng position, String text) {
+        Marker marker;
+
+        marker = mMap.addMarker(new MarkerOptions().position(position).title(text));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(position, 15));
+
+        return marker;
+    }
+
+    @SuppressLint("MissingPermission") // Permission check is not needed here since this method is accessed after a permission check
+    public void zoomToPosition() {
+        Criteria criteria = new Criteria();
+        String provider = mLocationManager.getBestProvider(criteria, false);
+        Location location = mLocationManager.getLastKnownLocation(provider);
+        LatLng position = new LatLng(location.getLatitude(), location.getLongitude());
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(position, 15));
     }
 }
