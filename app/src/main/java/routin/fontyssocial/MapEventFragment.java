@@ -26,6 +26,14 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.Map;
 
 import static android.content.Context.LOCATION_SERVICE;
 
@@ -35,10 +43,16 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback {
     private Marker mLocationMarker = null;
     private Location mLocation = null;
 
+    final FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference ref = database.getReference("users");
+
     private final LocationListener mLocationListener = new LocationListener() {
         @Override
         public void onLocationChanged(final Location location) {
             mLocation = location;
+            mMap.clear();
+            ref.child(User.getInstance().getName()).child("latitude").setValue(location.getLatitude());
+            ref.child(User.getInstance().getName()).child("longitude").setValue(location.getLongitude());
         }
 
         @Override
@@ -84,6 +98,35 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback {
             mMap.setMyLocationEnabled(true);
             this.zoomToPosition();
         }
+
+        ref.addValueEventListener(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        //Get map of users in datasnapshot
+                        Map<String,Object> users = (Map<String,Object>) dataSnapshot.getValue();
+
+                        for (Map.Entry<String, Object> entry : users.entrySet()){
+
+                            String name = entry.toString().split("=")[0];
+
+                            if (!name.equals(User.getInstance().getName())){
+                                //Get user map
+                                Map singleUser = (Map) entry.getValue();
+                                //Get phone field and append to list
+
+                                double latitude = (double) singleUser.get("latitude");
+                                double longitude = (double) singleUser.get("longitude");
+                                addMarker(latitude, longitude, name);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        //handle databaseError
+                    }
+                });
 
         // Test of our custom method to add a marker
         //this.addMarker(51.441642, 5.4697225, "Eindhoven");
