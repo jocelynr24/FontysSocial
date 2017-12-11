@@ -193,7 +193,9 @@ public class AddEventFragment extends Fragment {
         LatLng position = getLocationFromAddress(getContext(), address);
 
         if(position != null){
-            ((MainActivity) getActivity()).addEvent(name, startDate, startTime, endDate, endTime, position);
+
+        //    ((MainActivity) getActivity()).addEvent(name, startDate, startTime, endDate, endTime, position);
+
         } else {
             this.alertDialog("Incorrect address", "The address you typed is incorrect, please retry.", "OK");
         }
@@ -221,4 +223,8 @@ public class AddEventFragment extends Fragment {
 
         return position;
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> Julien

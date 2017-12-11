@@ -130,4 +130,6 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback {
         LatLng position = new LatLng(location.getLatitude(), location.getLongitude());
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(position, 15));
     }
+
 }
+
