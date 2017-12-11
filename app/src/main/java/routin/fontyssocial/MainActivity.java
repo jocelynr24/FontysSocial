@@ -1,9 +1,12 @@
 package routin.fontyssocial;
 
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,8 +16,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+import com.google.android.gms.maps.model.LatLng;
+
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+    public MapEventFragment mapEventFragment;
+    AddEventFragment addEventFragment;
+    NotificationsFragment notificationsFragment;
+    FriendsFragment friendsFragment;
+    SettingsFragment settingsFragment;
+    ProfileFragment profileFragment;
+    FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,16 +33,6 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        // todo: see if the floating action button is useful
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -42,7 +43,35 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        // The floating action button to add events
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Intent myIntent = new Intent(MainActivity.this, AddEventActivity.class);
+                //MainActivity.this.startActivity(myIntent);
+                getFragmentManager().beginTransaction().replace(R.id.content_frame, addEventFragment).commit();
+                if(fab.getDrawable().getConstantState() == view.getContext().getResources().getDrawable(R.drawable.ic_event_close, view.getContext().getTheme()).getConstantState()){
+                    getFragmentManager().beginTransaction().replace(R.id.content_frame, mapEventFragment).commit();
+                    fab.show();
+                    fab.setImageResource(R.drawable.ic_event_add);
+                } else {
+                    fab.setImageResource(R.drawable.ic_event_close);
+                }
+            }
+        });
+
+        // App run for the first time
         if (savedInstanceState == null){
+            // We create all the fragments
+            mapEventFragment = new MapEventFragment();
+            addEventFragment = new AddEventFragment();
+            notificationsFragment = new NotificationsFragment();
+            friendsFragment = new FriendsFragment();
+            settingsFragment = new SettingsFragment();
+            profileFragment = new ProfileFragment();
+
+            // We set the map fragment as default
             MenuItem item =  navigationView.getMenu().getItem(0);
             onNavigationItemSelected(item);
         }
@@ -58,52 +87,47 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    // todo: see if this part is useless
-    /*@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }*/
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-        FragmentManager fragmentManager = getFragmentManager();
-
-        if (id == R.id.nav_map) {
-            fragmentManager.beginTransaction().replace(R.id.content_frame, new MapappFragment()).commit();
-        } else if (id == R.id.nav_notifications) {
-            fragmentManager.beginTransaction().replace(R.id.content_frame, new NotificationsFragment()).commit();
-        } else if (id == R.id.nav_friends) {
-            fragmentManager.beginTransaction().replace(R.id.content_frame, new FriendsFragment()).commit();
-        } else if (id == R.id.nav_settings) {
-            fragmentManager.beginTransaction().replace(R.id.content_frame, new SettingsFragment()).commit();
-        } else if (id == R.id.nav_profile) {
-            fragmentManager.beginTransaction().replace(R.id.content_frame, new ProfileFragment()).commit();
-        } else if (id == R.id.nav_logout) {
-            // todo: logout action
+        switch(item.getItemId()){
+            case R.id.nav_map:
+                getFragmentManager().beginTransaction().replace(R.id.content_frame, mapEventFragment).commit();
+                fab.show();
+                fab.setImageResource(R.drawable.ic_event_add);
+                break;
+            case R.id.nav_notifications:
+                getFragmentManager().beginTransaction().replace(R.id.content_frame, notificationsFragment).commit();
+                fab.hide();
+                break;
+            case R.id.nav_friends:
+                getFragmentManager().beginTransaction().replace(R.id.content_frame, friendsFragment).commit();
+                fab.hide();
+                break;
+            case R.id.nav_settings:
+                getFragmentManager().beginTransaction().replace(R.id.content_frame, settingsFragment).commit();
+                fab.hide();
+                break;
+            case R.id.nav_profile:
+                getFragmentManager().beginTransaction().replace(R.id.content_frame, profileFragment).commit();
+                fab.hide();
+                break;
+            case R.id.nav_logout:
+                // todo: logout action
+                break;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void addEvent(String name, String startDate, String startTime, String endDate, String endTime, LatLng position){
+        // Restore the map fragment after adding an event
+        getFragmentManager().beginTransaction().replace(R.id.content_frame, mapEventFragment).commit();
+        fab.setImageResource(R.drawable.ic_event_add);
+        // Place the new event on the map
+        //mapEventFragment.addMarker(position, name);
+        mapEventFragment.addMarker(51.441642, 5.4697225, "Eindhoven");
     }
 }
