@@ -223,8 +223,6 @@ public class AddEventFragment extends Fragment {
 
         return position;
     }
-<<<<<<< HEAD
+
 }
-=======
-}
->>>>>>> Julien
+
