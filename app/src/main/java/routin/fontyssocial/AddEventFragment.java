@@ -10,6 +10,7 @@ import android.location.Geocoder;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,7 +37,7 @@ public class AddEventFragment extends Fragment {
     EditText text_endDate;
     EditText text_startTime;
     EditText text_endTime;
-    Button button_add;
+    FloatingActionButton fab_add;
 
     private Calendar mStartDate = Calendar.getInstance();
     private Calendar mEndDate = Calendar.getInstance();
@@ -56,7 +57,7 @@ public class AddEventFragment extends Fragment {
         text_endDate = (EditText) myView.findViewById(R.id.et_enddate);
         text_startTime = (EditText) myView.findViewById(R.id.et_starttime);
         text_endTime = (EditText) myView.findViewById(R.id.et_endtime);
-        button_add = (Button) myView.findViewById(R.id.bt_add);
+        fab_add = (FloatingActionButton) myView.findViewById(R.id.fab_add);
 
         text_startDate.setTextIsSelectable(true);
         text_endDate.setTextIsSelectable(true);
@@ -174,7 +175,7 @@ public class AddEventFragment extends Fragment {
     }
 
     public void initializeButton(){
-        button_add.setOnClickListener(new View.OnClickListener() {
+        fab_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 sendEvent();
@@ -193,11 +194,10 @@ public class AddEventFragment extends Fragment {
         LatLng position = getLocationFromAddress(getContext(), address);
 
         if(position != null){
-
         //    ((MainActivity) getActivity()).addEvent(name, startDate, startTime, endDate, endTime, position);
-
+            // todo: add the event to the database
         } else {
-            this.alertDialog("Incorrect address", "The address you typed is incorrect, please retry.", "OK");
+            this.alertDialog(getString(R.string.event_incorrectaddress), getString(R.string.event_incorrectaddressdesc), getString(R.string.event_ok));
         }
 
     }

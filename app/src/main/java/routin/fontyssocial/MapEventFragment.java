@@ -151,7 +151,7 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback {
 
         position = new LatLng(latitude, longitude);
         marker = mMap.addMarker(new MarkerOptions().position(position).title(text));
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(position, 15));
+        //mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(position, 15));
 
         return marker;
     }
@@ -160,7 +160,7 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback {
         Marker marker;
 
         marker = mMap.addMarker(new MarkerOptions().position(position).title(text));
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(position, 15));
+        //mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(position, 15));
 
         return marker;
     }
