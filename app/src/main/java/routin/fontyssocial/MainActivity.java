@@ -35,8 +35,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ProfileFragment profileFragment;
     private FloatingActionButton fab;
 
-    private static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,15 +136,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    /*public void addEvent(String name, String startDate, String startTime, String endDate, String endTime, LatLng position){
-        // Restore the map fragment after adding an event
-        getFragmentManager().beginTransaction().replace(R.id.content_frame, mapEventFragment).commit();
-        fab.setImageResource(R.drawable.ic_event_add);
-        // Place the new event on the map
-        //mapEventFragment.addMarker(position, name);
-        mapEventFragment.addMarker(51.441642, 5.4697225, "Eindhoven");
-    }*/
-
     public void alertDialog(String title, String content, String validation){
         AlertDialog alertDialog = new AlertDialog.Builder(this).create();
         alertDialog.setTitle(title);
@@ -160,21 +149,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         alertDialog.show();
     }
 
-    // todo: il faut que le message d'erreur n'apparaisse pas
     public void checkPermissions(){
-        if ((ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-        || (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)){
-
-            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_LOCATION);
-            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION}, MY_PERMISSIONS_REQUEST_LOCATION);
-
-            if ((ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-            || (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)){
-                this.alertDialog(getString(R.string.permission_locationerror), getString(R.string.permission_locationerrordesc), getString(R.string.permission_locationok));
-            }
-
+        if ((ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+                || (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)){
+            this.alertDialog(getString(R.string.permission_locationerror), getString(R.string.permission_locationerrordesc), getString(R.string.permission_locationok));
         }
-
     }
 
 }

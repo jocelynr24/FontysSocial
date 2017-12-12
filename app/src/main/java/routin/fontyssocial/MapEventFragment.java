@@ -38,7 +38,7 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap mMap;
     private LocationManager mLocationManager;
     private Marker mLocationMarker = null;
-    private Location mLocation = null;
+    //private Location mLocation = null;
 
     final FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference ref = database.getReference("users");
@@ -46,7 +46,7 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback {
     private final LocationListener mLocationListener = new LocationListener() {
         @Override
         public void onLocationChanged(final Location location) {
-            mLocation = location;
+            //mLocation = location;
             mMap.clear();
             ref.child(User.getInstance().getName()).child("latitude").setValue(location.getLatitude());
             ref.child(User.getInstance().getName()).child("longitude").setValue(location.getLongitude());
@@ -75,15 +75,6 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback {
         mapFragment.getMapAsync(this);
 
         mLocationManager = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
-
-
-        // Permission check is now made in MainActivity
-        /*if (ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // Location must be enabled
-            this.alertDialog("Location error", "Location authorization is required to work correctly. Please enable it to use this app.", "OK");
-        } else {
-            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 50, mLocationListener);
-        }*/
 
         if (permissionsGranted()) {
             mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 50, mLocationListener);
@@ -165,7 +156,7 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback {
         return marker;
     }
 
-    @SuppressLint("MissingPermission") // Permission check is not needed here since this method is accessed after a permission check
+    @SuppressLint("MissingPermission")
     public void zoomToPosition() {
         Criteria criteria = new Criteria();
         String provider = mLocationManager.getBestProvider(criteria, false);
