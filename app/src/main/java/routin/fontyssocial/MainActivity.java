@@ -1,11 +1,18 @@
 package routin.fontyssocial;
 
+import android.*;
+import android.app.AlertDialog;
 import android.app.FragmentManager;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -20,13 +27,15 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    public MapEventFragment mapEventFragment;
-    AddEventFragment addEventFragment;
-    NotificationsFragment notificationsFragment;
-    FriendsFragment friendsFragment;
-    SettingsFragment settingsFragment;
-    ProfileFragment profileFragment;
-    FloatingActionButton fab;
+    private MapEventFragment mapEventFragment;
+    private AddEventFragment addEventFragment;
+    private NotificationsFragment notificationsFragment;
+    private FriendsFragment friendsFragment;
+    private SettingsFragment settingsFragment;
+    private ProfileFragment profileFragment;
+    private FloatingActionButton fab;
+
+    private static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +70,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
             }
         });
+
+        // Permissions check
+        checkPermissions();
 
         // App run for the first time
         if (savedInstanceState == null){
@@ -126,12 +138,43 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    public void addEvent(String name, String startDate, String startTime, String endDate, String endTime, LatLng position){
+    /*public void addEvent(String name, String startDate, String startTime, String endDate, String endTime, LatLng position){
         // Restore the map fragment after adding an event
         getFragmentManager().beginTransaction().replace(R.id.content_frame, mapEventFragment).commit();
         fab.setImageResource(R.drawable.ic_event_add);
         // Place the new event on the map
         //mapEventFragment.addMarker(position, name);
         mapEventFragment.addMarker(51.441642, 5.4697225, "Eindhoven");
+    }*/
+
+    public void alertDialog(String title, String content, String validation){
+        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+        alertDialog.setTitle(title);
+        alertDialog.setMessage(content);
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, validation,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        alertDialog.show();
     }
+
+    // todo: il faut que le message d'erreur n'apparaisse pas
+    public void checkPermissions(){
+        if ((ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+        || (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)){
+
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_LOCATION);
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION}, MY_PERMISSIONS_REQUEST_LOCATION);
+
+            if ((ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+            || (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)){
+                this.alertDialog(getString(R.string.permission_locationerror), getString(R.string.permission_locationerrordesc), getString(R.string.permission_locationok));
+            }
+
+        }
+
+    }
+
 }

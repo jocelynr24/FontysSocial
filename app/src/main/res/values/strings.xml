@@ -43,4 +43,7 @@
     <string name="event_incorrectaddress">Incorrect address</string>
     <string name="event_incorrectaddressdesc">The address you typed is incorrect, please retry.</string>
     <string name="event_ok">OK</string>
+    <string name="permission_locationerror">Location error</string>
+    <string name="permission_locationerrordesc">Location authorization is required to work correctly. Please enable it to use this app.</string>
+    <string name="permission_locationok">OK</string>
 </resources>
