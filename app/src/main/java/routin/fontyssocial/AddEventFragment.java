@@ -21,6 +21,8 @@ import android.widget.EditText;
 import android.widget.TimePicker;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -29,16 +31,14 @@ import java.util.List;
 import java.util.Locale;
 
 public class AddEventFragment extends Fragment {
-    View myView;
-
-    EditText text_name;
-    EditText text_address;
-    EditText text_startDate;
-    EditText text_endDate;
-    EditText text_startTime;
-    EditText text_endTime;
-    FloatingActionButton fab_add;
-
+    private View myView;
+    private EditText text_name;
+    private EditText text_address;
+    private EditText text_startDate;
+    private EditText text_endDate;
+    private EditText text_startTime;
+    private EditText text_endTime;
+    private FloatingActionButton fab_add;
     private Calendar mStartDate = Calendar.getInstance();
     private Calendar mEndDate = Calendar.getInstance();
     private Calendar mStartTime = Calendar.getInstance();
@@ -73,7 +73,7 @@ public class AddEventFragment extends Fragment {
         return myView;
     }
 
-    public void alertDialog(String title, String content, String validation){
+    private void alertDialog(String title, String content, String validation){
         AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
         alertDialog.setTitle(title);
         alertDialog.setMessage(content);
@@ -86,7 +86,7 @@ public class AddEventFragment extends Fragment {
         alertDialog.show();
     }
 
-    public void initializeStartDatePicker(){
+    private void initializeStartDatePicker(){
         final DatePickerDialog.OnDateSetListener startdate = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -109,7 +109,7 @@ public class AddEventFragment extends Fragment {
         });
     }
 
-    public void initializeEndDatePicker(){
+    private void initializeEndDatePicker(){
         final DatePickerDialog.OnDateSetListener enddate = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -132,7 +132,7 @@ public class AddEventFragment extends Fragment {
         });
     }
 
-    public void initializeStartTimePicker(){
+    private void initializeStartTimePicker(){
         final TimePickerDialog.OnTimeSetListener starttime = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -153,7 +153,7 @@ public class AddEventFragment extends Fragment {
         });
     }
 
-    public void initializeEndTimePicker(){
+    private void initializeEndTimePicker(){
         final TimePickerDialog.OnTimeSetListener endtime = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -174,7 +174,7 @@ public class AddEventFragment extends Fragment {
         });
     }
 
-    public void initializeButton(){
+    private void initializeButton(){
         fab_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -183,26 +183,28 @@ public class AddEventFragment extends Fragment {
         });
     }
 
-    public void sendEvent(){
+    private void sendEvent(){
         String name = text_name.getText().toString();
         String address = text_address.getText().toString();
         String startDate = text_startDate.getText().toString();
         String endDate = text_endDate.getText().toString();
         String startTime = text_startTime.getText().toString();
         String endTime = text_endTime.getText().toString();
-
         LatLng position = getLocationFromAddress(getContext(), address);
 
         if(position != null){
-        //    ((MainActivity) getActivity()).addEvent(name, startDate, startTime, endDate, endTime, position);
-            // todo: add the event to the database
+            MainActivity ma = ((MainActivity) getActivity());
+            Event event = new Event(name, position, startDate, endDate, startTime, endTime);
+
+            ma.getFragmentManager().beginTransaction().replace(R.id.content_frame, ma.mapEventFragment).commit();
+            ma.fab.show();
+            ma.fab.setImageResource(R.drawable.ic_event_add);
         } else {
             this.alertDialog(getString(R.string.event_incorrectaddress), getString(R.string.event_incorrectaddressdesc), getString(R.string.event_ok));
         }
-
     }
 
-    public LatLng getLocationFromAddress(Context context, String address) {
+    private LatLng getLocationFromAddress(Context context, String address) {
         Geocoder geocoder = new Geocoder(context);
         List<Address> result;
         LatLng position = null;
@@ -210,19 +212,20 @@ public class AddEventFragment extends Fragment {
         try {
             result = geocoder.getFromLocationName(address, 1);
             if (address == null) {
-                return null;
+                position = null;
             }
-            Address location = result.get(0);
-            location.getLatitude();
-            location.getLongitude();
-
-            position = new LatLng(location.getLatitude(), location.getLongitude() );
+            if (result != null){
+                Address location = result.get(0);
+                location.getLatitude();
+                location.getLongitude();
+                position = new LatLng(location.getLatitude(), location.getLongitude() );
+            } else {
+                position = null;
+            }
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-
         return position;
     }
-
 }
 

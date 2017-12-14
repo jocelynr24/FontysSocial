@@ -53,7 +53,7 @@
             android:layout_marginTop="8dp"
             android:ems="10"
             android:hint="@string/event_nameinput"
-            android:inputType="textPersonName"
+            android:inputType="textCapSentences"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_name" />
@@ -67,7 +67,7 @@
             android:layout_marginTop="16dp"
             android:ems="10"
             android:hint="@string/event_addressinput"
-            android:inputType="textPersonName"
+            android:inputType="textCapSentences"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_address" />

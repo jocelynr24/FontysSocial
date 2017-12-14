@@ -3,6 +3,7 @@ package routin.fontyssocial;
 import android.*;
 import android.app.AlertDialog;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -27,13 +28,14 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    private MapEventFragment mapEventFragment;
-    private AddEventFragment addEventFragment;
-    private NotificationsFragment notificationsFragment;
-    private FriendsFragment friendsFragment;
-    private SettingsFragment settingsFragment;
-    private ProfileFragment profileFragment;
-    private FloatingActionButton fab;
+    public MapEventFragment mapEventFragment;
+    public AddEventFragment addEventFragment;
+    public NotificationsFragment notificationsFragment;
+    public FriendsFragment friendsFragment;
+    public SettingsFragment settingsFragment;
+    public ProfileFragment profileFragment;
+    public FloatingActionButton fab;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +58,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Intent myIntent = new Intent(MainActivity.this, AddEventActivity.class);
-                //MainActivity.this.startActivity(myIntent);
                 getFragmentManager().beginTransaction().replace(R.id.content_frame, addEventFragment).commit();
                 if(fab.getDrawable().getConstantState() == view.getContext().getResources().getDrawable(R.drawable.ic_event_close, view.getContext().getTheme()).getConstantState()){
                     getFragmentManager().beginTransaction().replace(R.id.content_frame, mapEventFragment).commit();
