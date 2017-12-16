@@ -26,6 +26,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import model.User;
+
 /**
  * Created by conte on 30/11/2017.
  */

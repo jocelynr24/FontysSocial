@@ -9,15 +9,15 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -33,19 +33,44 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.StatusLine;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.net.URI;
 import java.util.Map;
 
+//import javax.ws.rs.client.Client;
+//import javax.ws.rs.client.ClientBuilder;
+//import javax.ws.rs.client.WebTarget;
+//import javax.ws.rs.core.MediaType;
+//import javax.ws.rs.core.Response;
+//import javax.ws.rs.core.UriBuilder;
+//
+//import org.glassfish.jersey.client.ClientConfig;
+
+import model.User;
+import modelGoogle.DistanceGoogleMatrix;
+
 import static android.content.Context.LOCATION_SERVICE;
+import static android.provider.ContactsContract.CommonDataKinds.Website.URL;
 
 public class MapEventFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap mMap;
     private LocationManager mLocationManager;
     private Marker mLocationMarker = null;
     private Location mLocation = null;
-
+    //    private WebTarget serviceTarget=null;
+//    private ClientConfig config = new ClientConfig();
+//    private Client client = ClientBuilder.newClient(config);
     final FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference ref = database.getReference("users");
-
+    String apiKeyMapDistance="AIzaSyDeKvB4UAJRjhhGgQg_G5EmcA7OHQQgRMM";
     private final LocationListener mLocationListener = new LocationListener() {
         @Override
         public void onLocationChanged(final Location location) {
@@ -117,7 +142,8 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback {
 
                                 double latitude = (double) singleUser.get("latitude");
                                 double longitude = (double) singleUser.get("longitude");
-                                addMarker(latitude, longitude, name);
+//                                Double distance=getDistance(mLocation.getLatitude(),mLocation.getLongitude(),latitude,longitude);
+                                addMarker(latitude, longitude, name,null);
                             }
                         }
                     }
@@ -145,12 +171,12 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback {
         alertDialog.show();
     }
 
-    public Marker addMarker(double latitude, double longitude, String text) {
+    public Marker addMarker(double latitude, double longitude, String text, Double distance) {
         LatLng position;
         Marker marker;
 
         position = new LatLng(latitude, longitude);
-        marker = mMap.addMarker(new MarkerOptions().position(position).title(text));
+        marker = mMap.addMarker(new MarkerOptions().position(position).title(text+"\n"+distance));
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(position, 15));
 
         return marker;
@@ -173,6 +199,34 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback {
         LatLng position = new LatLng(location.getLatitude(), location.getLongitude());
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(position, 15));
     }
+    private DistanceGoogleMatrix GetRequest(double latitudeUser,double longitudeUser,double latitude, double longitude) throws IOException {
+        HttpClient httpclient = new DefaultHttpClient();
+        HttpResponse response = httpclient.execute(new HttpGet("https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins="
+                +latitudeUser+","+longitudeUser+"&destinations="  +latitude+","+longitude+"&key="+apiKeyMapDistance));
+        StatusLine statusLine = response.getStatusLine();
+        if(statusLine.getStatusCode() == HttpStatus.SC_OK){
+            DistanceGoogleMatrix distanceGoogleMatrix= (DistanceGoogleMatrix) response.getEntity();
+            return distanceGoogleMatrix;
+        } else{
+            response.getEntity().getContent().close();
+            throw new IOException(statusLine.getReasonPhrase());
+        }
+
+    }
+//    public Double getDistance(double latitudeUser,double longitudeUser,double latitude, double longitude){
+//
+//        URI baseURI = UriBuilder.fromUri("https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins="
+//                +latitudeUser+","+longitudeUser+"&destinations="  +latitude+","+longitude+"&key="+apiKeyMapDistance).build();
+//
+//        serviceTarget = client.target(baseURI);
+//
+//        Response response = serviceTarget.request().accept(MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML).get();
+//        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
+//            DistanceGoogleMatrix result = response.readEntity(DistanceGoogleMatrix.class);
+//            return result.getRows()[0].elements[0].getDistance().getValue()*0.000621371;
+//        }
+//        return null;
+//    }
 
 }
 

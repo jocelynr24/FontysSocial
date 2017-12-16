@@ -132,6 +132,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fab.setImageResource(R.drawable.ic_event_add);
         // Place the new event on the map
         //mapEventFragment.addMarker(position, name);
-        mapEventFragment.addMarker(51.441642, 5.4697225, "Eindhoven");
+        mapEventFragment.addMarker(51.441642, 5.4697225, "Eindhoven",null);
     }
 }
