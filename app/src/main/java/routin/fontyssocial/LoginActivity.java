@@ -48,7 +48,6 @@ public class LoginActivity extends AppCompatActivity {
         LoginActivity.context = getApplicationContext();
         mail_account = findViewById(R.id.email);
         password = findViewById(R.id.password);
-        //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
         addAdapterToViews();
 
@@ -87,7 +86,7 @@ public class LoginActivity extends AppCompatActivity {
                                                 //Log.w(TAG, "createUserWithEmail:failure", task.getException());
                                                 Toast.makeText(LoginActivity.this, "Authentication failed.",
                                                         Toast.LENGTH_SHORT).show();
-                                                updateUI(null);
+                                               // updateUI(null);
                                             }
 
                                             // ...
