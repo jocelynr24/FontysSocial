@@ -12,11 +12,11 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -38,8 +38,10 @@ import java.util.Map;
 import static android.content.Context.LOCATION_SERVICE;
 
 public class MapEventFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
+    View myView;
     private GoogleMap mMap;
     private LocationManager mLocationManager;
+    public FloatingActionButton fab_createevent;
     private Marker mLocationMarker = null;
     //private Location mLocation = null;
 
@@ -75,7 +77,18 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_map_event, container, false);
+        myView = inflater.inflate(R.layout.fragment_map_event, container, false);
+
+
+        // The floating action button to add events
+        fab_createevent = (FloatingActionButton) myView.findViewById(R.id.fab_createevent);
+        fab_createevent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MainActivity ma = ((MainActivity) getActivity());
+                ma.getFragmentManager().beginTransaction().replace(R.id.content_frame, ma.addEventFragment).commit();
+            }
+        });
 
         MapFragment mapFragment = (MapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -86,7 +99,7 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
             mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 50, mLocationListener);
         }
 
-        return view;
+        return myView;
     }
 
     @SuppressLint("MissingPermission")
@@ -105,13 +118,13 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         //Get map of users in datasnapshot
-                        Map<String,Object> users = (Map<String,Object>) dataSnapshot.getValue();
+                        Map<String, Object> users = (Map<String, Object>) dataSnapshot.getValue();
 
-                        for (Map.Entry<String, Object> entry : users.entrySet()){
+                        for (Map.Entry<String, Object> entry : users.entrySet()) {
 
                             String name = entry.toString().split("=")[0];
 
-                            if (!name.equals(User.getInstance().getName())){
+                            if (!name.equals(User.getInstance().getName())) {
                                 //Get user map
                                 Map singleUser = (Map) entry.getValue();
                                 //Get phone field and append to list
@@ -134,13 +147,13 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         //Get map of users in datasnapshot
-                        Map<String,Object> events = (Map<String,Object>) dataSnapshot.getValue();
+                        Map<String, Object> events = (Map<String, Object>) dataSnapshot.getValue();
 
-                        for (Map.Entry<String, Object> entry : events.entrySet()){
+                        for (Map.Entry<String, Object> entry : events.entrySet()) {
 
                             String name = entry.toString().split("=")[0];
 
-                            if (!name.equals(Event.getInstance().getName())){
+                            if (!name.equals(Event.getInstance().getName())) {
                                 //Get user map
                                 Map singleEvent = (Map) entry.getValue();
                                 //Get phone field and append to list
@@ -168,28 +181,31 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
     }
 
     @Override
-    public void onInfoWindowClick(Marker marker) {
+    public void onInfoWindowClick(final Marker marker) {
         final String type = marker.getTitle().split(":")[0];
         final String name = eventsInfos.get(marker)[0];
 
-        if(type.equals("Event")){
+        if (type.equals("Event")) {
             AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
             alertDialog.setTitle(marker.getTitle());
-            alertDialog.setMessage(marker.getSnippet() + "\n\n" + R.string.mapevent_address + eventsInfos.get(marker)[1] + "\n" + R.string.mapevent_start + eventsInfos.get(marker)[2] + R.string.mapevent_at + eventsInfos.get(marker)[3] + "\n" + R.string.mapevent_end + eventsInfos.get(marker)[4] + R.string.mapevent_at + eventsInfos.get(marker)[5]);
-            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Close",
+            alertDialog.setMessage(marker.getSnippet() + "\n\n" + getText(R.string.mapevent_address) + eventsInfos.get(marker)[1] + "\n" + getText(R.string.mapevent_start) + eventsInfos.get(marker)[2] + getText(R.string.mapevent_at) + eventsInfos.get(marker)[3] + "\n" + getText(R.string.mapevent_end) + eventsInfos.get(marker)[4] + getText(R.string.mapevent_at) + eventsInfos.get(marker)[5]);
+            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, getText(R.string.mapevent_close),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
                         }
                     });
             // todo: the event can be only removed by the owner of the event
-            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Remove",
+            //if(/* The user is the owner of this event */){
+            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getText(R.string.mapevent_remove),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             events.child(name).removeValue();
+                            marker.remove();
                         }
                     });
             alertDialog.show();
+            //}
         }
     }
 
@@ -246,7 +262,7 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(position, 15));
     }
 
-    public boolean permissionsGranted(){
+    public boolean permissionsGranted() {
         if (ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             return true;
         } else {

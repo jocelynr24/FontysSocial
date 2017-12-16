@@ -53,22 +53,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        // The floating action button to add events
-        fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getFragmentManager().beginTransaction().replace(R.id.content_frame, addEventFragment).commit();
-                if(fab.getDrawable().getConstantState() == view.getContext().getResources().getDrawable(R.drawable.ic_event_close, view.getContext().getTheme()).getConstantState()){
-                    getFragmentManager().beginTransaction().replace(R.id.content_frame, mapEventFragment).commit();
-                    fab.show();
-                    fab.setImageResource(R.drawable.ic_event_add);
-                } else {
-                    fab.setImageResource(R.drawable.ic_event_close);
-                }
-            }
-        });
-
         // Permissions check
         checkPermissions();
 
@@ -104,24 +88,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch(item.getItemId()){
             case R.id.nav_map:
                 getFragmentManager().beginTransaction().replace(R.id.content_frame, mapEventFragment).commit();
-                fab.show();
-                fab.setImageResource(R.drawable.ic_event_add);
                 break;
             case R.id.nav_notifications:
                 getFragmentManager().beginTransaction().replace(R.id.content_frame, notificationsFragment).commit();
-                fab.hide();
                 break;
             case R.id.nav_friends:
                 getFragmentManager().beginTransaction().replace(R.id.content_frame, friendsFragment).commit();
-                fab.hide();
                 break;
             case R.id.nav_settings:
                 getFragmentManager().beginTransaction().replace(R.id.content_frame, settingsFragment).commit();
-                fab.hide();
                 break;
             case R.id.nav_profile:
                 getFragmentManager().beginTransaction().replace(R.id.content_frame, profileFragment).commit();
-                fab.hide();
                 break;
             case R.id.nav_logout:
                 FirebaseAuth auth = FirebaseAuth.getInstance();

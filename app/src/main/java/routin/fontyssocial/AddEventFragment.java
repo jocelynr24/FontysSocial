@@ -11,11 +11,9 @@ import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
@@ -39,7 +37,8 @@ public class AddEventFragment extends Fragment {
     private EditText text_endDate;
     private EditText text_startTime;
     private EditText text_endTime;
-    private FloatingActionButton fab_add;
+    private FloatingActionButton fab_addevent;
+    private FloatingActionButton fab_closeevent;
     private Calendar mStartDate = Calendar.getInstance();
     private Calendar mEndDate = Calendar.getInstance();
     private Calendar mStartTime = Calendar.getInstance();
@@ -62,7 +61,8 @@ public class AddEventFragment extends Fragment {
         text_endDate = (EditText) myView.findViewById(R.id.et_enddate);
         text_startTime = (EditText) myView.findViewById(R.id.et_starttime);
         text_endTime = (EditText) myView.findViewById(R.id.et_endtime);
-        fab_add = (FloatingActionButton) myView.findViewById(R.id.fab_add);
+        fab_addevent = (FloatingActionButton) myView.findViewById(R.id.fab_addevent);
+        fab_closeevent = (FloatingActionButton) myView.findViewById(R.id.fab_closeevent);
 
         text_startDate.setTextIsSelectable(true);
         text_endDate.setTextIsSelectable(true);
@@ -73,7 +73,7 @@ public class AddEventFragment extends Fragment {
         this.initializeEndDatePicker();
         this.initializeStartTimePicker();
         this.initializeEndTimePicker();
-        this.initializeButton();
+        this.initializeButtons();
 
         return myView;
     }
@@ -179,11 +179,21 @@ public class AddEventFragment extends Fragment {
         });
     }
 
-    private void initializeButton(){
-        fab_add.setOnClickListener(new View.OnClickListener() {
+    private void initializeButtons(){
+        fab_addevent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 sendEvent();
+                MainActivity ma = ((MainActivity) getActivity());
+                ma.getFragmentManager().beginTransaction().replace(R.id.content_frame, ma.mapEventFragment).commit();
+            }
+        });
+
+        fab_closeevent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity ma = ((MainActivity) getActivity());
+                ma.getFragmentManager().beginTransaction().replace(R.id.content_frame, ma.mapEventFragment).commit();
             }
         });
     }
@@ -199,8 +209,7 @@ public class AddEventFragment extends Fragment {
         LatLng position = getLocationFromAddress(getContext(), address);
 
         if(position != null){
-            MainActivity ma = ((MainActivity) getActivity());
-            Event event = new Event(name);
+            new Event(name);
             events.child(name).child("description").setValue(description);
             events.child(name).child("position").setValue(position);
             events.child(name).child("address").setValue(address);
@@ -208,10 +217,6 @@ public class AddEventFragment extends Fragment {
             events.child(name).child("start").child("time").setValue(startTime);
             events.child(name).child("end").child("date").setValue(endDate);
             events.child(name).child("end").child("time").setValue(endTime);
-
-            ma.getFragmentManager().beginTransaction().replace(R.id.content_frame, ma.mapEventFragment).commit();
-            ma.fab.show();
-            ma.fab.setImageResource(R.drawable.ic_event_add);
         } else {
             this.alertDialog(getString(R.string.event_incorrectaddress), getString(R.string.event_incorrectaddressdesc), getString(R.string.event_ok));
         }
