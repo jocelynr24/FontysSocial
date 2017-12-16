@@ -46,4 +46,12 @@
     <string name="permission_locationerror">Location error</string>
     <string name="permission_locationerrordesc">Location authorization is required to work correctly. Please enable it to use this app.</string>
     <string name="permission_locationok">OK</string>
+    <string name="event_desc">Short description of the event:</string>
+    <string name="event_descinput">Description</string>
+    <string name="mapevent_address">"Address: "</string>
+    <string name="mapevent_start">Start:</string>
+    <string name="mapevent_at">at</string>
+    <string name="mapevent_end">End:</string>
+    <string name="mapevent_close">Close</string>
+    <string name="mapevent_remove">Remove</string>
 </resources>

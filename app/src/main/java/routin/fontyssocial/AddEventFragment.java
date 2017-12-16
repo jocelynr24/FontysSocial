@@ -33,6 +33,7 @@ import java.util.Locale;
 public class AddEventFragment extends Fragment {
     private View myView;
     private EditText text_name;
+    private EditText text_desc;
     private EditText text_address;
     private EditText text_startDate;
     private EditText text_endDate;
@@ -44,6 +45,9 @@ public class AddEventFragment extends Fragment {
     private Calendar mStartTime = Calendar.getInstance();
     private Calendar mEndTime = Calendar.getInstance();
 
+    final FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference events = database.getReference("events");
+
     public AddEventFragment() {}
 
     @Nullable
@@ -52,6 +56,7 @@ public class AddEventFragment extends Fragment {
         myView = inflater.inflate(R.layout.fragment_add_event, container, false);
 
         text_name = (EditText) myView.findViewById(R.id.et_name);
+        text_desc = (EditText) myView.findViewById(R.id.et_desc);
         text_address = (EditText) myView.findViewById(R.id.et_address);
         text_startDate = (EditText) myView.findViewById(R.id.et_startdate);
         text_endDate = (EditText) myView.findViewById(R.id.et_enddate);
@@ -185,6 +190,7 @@ public class AddEventFragment extends Fragment {
 
     private void sendEvent(){
         String name = text_name.getText().toString();
+        String description = text_desc.getText().toString();
         String address = text_address.getText().toString();
         String startDate = text_startDate.getText().toString();
         String endDate = text_endDate.getText().toString();
@@ -194,7 +200,14 @@ public class AddEventFragment extends Fragment {
 
         if(position != null){
             MainActivity ma = ((MainActivity) getActivity());
-            Event event = new Event(name, position, startDate, endDate, startTime, endTime);
+            Event event = new Event(name);
+            events.child(name).child("description").setValue(description);
+            events.child(name).child("position").setValue(position);
+            events.child(name).child("address").setValue(address);
+            events.child(name).child("start").child("date").setValue(startDate);
+            events.child(name).child("start").child("time").setValue(startTime);
+            events.child(name).child("end").child("date").setValue(endDate);
+            events.child(name).child("end").child("time").setValue(endTime);
 
             ma.getFragmentManager().beginTransaction().replace(R.id.content_frame, ma.mapEventFragment).commit();
             ma.fab.show();

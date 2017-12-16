@@ -13,28 +13,26 @@ public class Event {
     final FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference ref = database.getReference("events");
     private String name;
+    private String description;
     private LatLng position;
     private String startDate;
     private String endDate;
     private String startTime;
     private String endTime;
 
-    public Event(String name, LatLng position, String startDate, String endDate, String startTime, String endTime){
+    public Event(String name){
         INSTANCE = this;
         this.name = name;
-        this.position = position;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.startTime = startTime;
-        this.endTime = endTime;
 
-        //if (ref.child(name) == null){
-            ref.child(name).child("position").setValue(position);
-            ref.child(name).child("startDate").setValue(startDate);
-            ref.child(name).child("endDate").setValue(endDate);
-            ref.child(name).child("startTime").setValue(startTime);
-            ref.child(name).child("endTime").setValue(endTime);
-        //}
+        if (ref.child(name) == null){
+            ref.child(name).child("description").setValue("");
+            ref.child(name).child("address").setValue("");
+            ref.child(name).child("position").setValue(new LatLng(0.0, 0.0));
+            ref.child(name).child("start").child("date").setValue("01/01/1970");
+            ref.child(name).child("start").child("time").setValue("00:00");
+            ref.child(name).child("end").child("date").setValue("01/01/1970");
+            ref.child(name).child("end").child("time").setValue("00:00");
+        }
     }
 
     public String getName() {
@@ -94,7 +92,7 @@ public class Event {
 
     public static Event getInstance() {
         if (INSTANCE == null) {
-            INSTANCE = new Event(null, null, null,null,null, null);
+            INSTANCE = new Event("");
         }
         return(INSTANCE);
     }
