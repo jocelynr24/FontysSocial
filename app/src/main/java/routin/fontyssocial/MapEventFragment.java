@@ -3,6 +3,7 @@ package routin.fontyssocial;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
@@ -11,18 +12,16 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -34,35 +33,17 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.StatusLine;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
-
-//import javax.ws.rs.client.Client;
-//import javax.ws.rs.client.ClientBuilder;
-//import javax.ws.rs.client.WebTarget;
-//import javax.ws.rs.core.MediaType;
-//import javax.ws.rs.core.Response;
-//import javax.ws.rs.core.UriBuilder;
-//
-//import org.glassfish.jersey.client.ClientConfig;
 
 import model.User;
 import modelGoogle.DistanceGoogleMatrix;
@@ -75,9 +56,6 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback {
     private Marker mLocationMarker = null;
     private Location mLocation = null;
     private FirebaseAuth auth;
-    //    private WebTarget serviceTarget=null;
-//    private ClientConfig config = new ClientConfig();
-//    private Client client = ClientBuilder.newClient(config);
     final FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference ref = database.getReference("users");
     private Map<String,Object> users = new HashMap<>();
@@ -264,82 +242,43 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback {
     private Location getLastKnownLocation() {
         mLocationManager = (LocationManager)getActivity().getSystemService(LOCATION_SERVICE);
         List<String> providers = mLocationManager.getProviders(true);
-        Location bestLocation = null;
+        Location location = null;
         for (String provider : providers) {
-            @SuppressLint("MissingPermission") Location l = mLocationManager.getLastKnownLocation(provider);
-            if (l == null) {
+            //get list of location
+            @SuppressLint("MissingPermission") Location myLocation = mLocationManager.getLastKnownLocation(provider);
+
+            if (myLocation == null) {
                 continue;
             }
-            if (bestLocation == null || l.getAccuracy() < bestLocation.getAccuracy()) {
-                // Found best last known location: %s", l);
-                bestLocation = l;
+            //get the closest location
+            if (location==null||myLocation.getAccuracy()<location.getAccuracy()) {
+                location = myLocation;
             }
         }
-        return bestLocation;
+        return location;
     }
-//    private Double GetRequest(double latitudeUser,double longitudeUser,double latitude, double longitude) throws IOException {
-//        HttpClient httpclient = new DefaultHttpClient();
-//        HttpResponse response = httpclient.execute(new HttpGet("https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins="
-//                +latitudeUser+","+longitudeUser+"&destinations="  +latitude+","+longitude+"&key="+apiKeyMapDistance));
-//        StatusLine statusLine = response.getStatusLine();
-//        if(statusLine.getStatusCode() == HttpStatus.SC_OK){
-//            DistanceGoogleMatrix distanceGoogleMatrix= (DistanceGoogleMatrix) response.getEntity();
-//            return distanceGoogleMatrix.getRows()[0].elements[0].getDistance().getValue()*0.000621371;
-//        } else{
-//            response.getEntity().getContent().close();
-//            throw new IOException(statusLine.getReasonPhrase());
-//        }
-//
-//    }
 
     public class HttpGetRequest extends AsyncTask<String, Void, String> {
         @Override
         protected String doInBackground(String[] params) {
-            //Create a URL object holding our url
-//            HttpClient httpclient = new DefaultHttpClient();
-//            HttpResponse response = null;
-//            try {
-//                response = httpclient.execute(new HttpGet("https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins="
-//                        +params[0]+","+params[1]+"&destinations="  +params[2]+","+params[3]+"&key="+apiKeyMapDistance));
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//            StatusLine statusLine = response.getStatusLine();
-//            if(statusLine.getStatusCode() == HttpStatus.SC_OK){
-//                DistanceGoogleMatrix distanceGoogleMatrix= (DistanceGoogleMatrix) response.getEntity();
-//                return distanceGoogleMatrix.getRows()[0].elements[0].getDistance().getValue()*0.000621371+"";
-//            } else{
-//                try {
-//                    response.getEntity().getContent().close();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//                try {
-//                    throw new IOException(statusLine.getReasonPhrase());
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//            return null;
-            StringBuffer chaine = new StringBuffer("");
+            StringBuffer chainResult = new StringBuffer("");
             try {
                 URL url = null;
                 url = new URL("https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins="
                         + params[0] + "," + params[1] + "&destinations=" + params[2] + "," + params[3] + "&key=" + apiKeyMapDistance);
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                connection.setRequestProperty("User-Agent", "");
                 connection.setRequestMethod("GET");
                 connection.setDoInput(true);
                 connection.connect();
 
                 InputStream inputStream = connection.getInputStream();
 
-                BufferedReader rd = new BufferedReader(new InputStreamReader(inputStream));
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
                 String line = "";
-                while ((line = rd.readLine()) != null) {
-                    chaine.append(line);
+                while ((line = bufferedReader.readLine()) != null) {
+                    chainResult.append(line);
                 }
-                DistanceGoogleMatrix distanceGoogleMatrix =gson.fromJson(chaine.toString(),DistanceGoogleMatrix.class);
+                DistanceGoogleMatrix distanceGoogleMatrix =gson.fromJson(chainResult.toString(),DistanceGoogleMatrix.class);
                 Double d= distanceGoogleMatrix.getRows()[0].elements[0].getDistance().getValue()/(double)1000;
                 return d+"";
             } catch (IOException e) {
@@ -352,21 +291,5 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback {
             super.onPostExecute(result);
         }
     }
-
-//    public Double getDistance(double latitudeUser,double longitudeUser,double latitude, double longitude){
-//
-//        URI baseURI = UriBuilder.fromUri("https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins="
-//                +latitudeUser+","+longitudeUser+"&destinations="  +latitude+","+longitude+"&key="+apiKeyMapDistance).build();
-//
-//        serviceTarget = client.target(baseURI);
-//
-//        Response response = serviceTarget.request().accept(MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML).get();
-//        if (response.getStatus() == Response.Status.OK.getStatusCode()) {
-//            DistanceGoogleMatrix result = response.readEntity(DistanceGoogleMatrix.class);
-//            return result.getRows()[0].elements[0].getDistance().getValue()*0.000621371;
-//        }
-//        return null;
-//    }
-
 }
 
