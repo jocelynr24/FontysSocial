@@ -38,7 +38,7 @@ import java.util.Map;
 import static android.content.Context.LOCATION_SERVICE;
 
 public class MapEventFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
-    View myView;
+    private View myView;
     private GoogleMap mMap;
     private LocationManager mLocationManager;
     public FloatingActionButton fab_createevent;
@@ -78,7 +78,6 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         myView = inflater.inflate(R.layout.fragment_map_event, container, false);
-
 
         // The floating action button to add events
         fab_createevent = (FloatingActionButton) myView.findViewById(R.id.fab_createevent);
@@ -188,7 +187,7 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
         if (type.equals("Event")) {
             AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
             alertDialog.setTitle(marker.getTitle());
-            alertDialog.setMessage(marker.getSnippet() + "\n\n" + getText(R.string.mapevent_address) + eventsInfos.get(marker)[1] + "\n" + getText(R.string.mapevent_start) + eventsInfos.get(marker)[2] + getText(R.string.mapevent_at) + eventsInfos.get(marker)[3] + "\n" + getText(R.string.mapevent_end) + eventsInfos.get(marker)[4] + getText(R.string.mapevent_at) + eventsInfos.get(marker)[5]);
+            alertDialog.setMessage(marker.getSnippet() + "\n\n" + getText(R.string.mapevent_address) + " " + eventsInfos.get(marker)[1] + "\n" + getText(R.string.mapevent_start) + " " + eventsInfos.get(marker)[2] + " " + getText(R.string.mapevent_at) + " " + eventsInfos.get(marker)[3] + "\n" + getText(R.string.mapevent_end) + " " + eventsInfos.get(marker)[4] + " " + getText(R.string.mapevent_at) + " " + eventsInfos.get(marker)[5]);
             alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, getText(R.string.mapevent_close),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {

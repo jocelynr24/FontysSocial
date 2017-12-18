@@ -47,8 +47,6 @@ public class AddEventFragment extends Fragment {
     final FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference events = database.getReference("events");
 
-    public AddEventFragment() {}
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

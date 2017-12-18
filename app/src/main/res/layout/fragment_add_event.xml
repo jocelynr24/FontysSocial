@@ -166,7 +166,7 @@
             android:layout_marginBottom="16dp"
             android:layout_marginEnd="16dp"
             android:clickable="true"
-            android:src="@drawable/ic_event_check"
+            android:src="@drawable/ic_fab_check"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
@@ -177,7 +177,7 @@
             android:layout_marginBottom="16dp"
             android:layout_marginStart="16dp"
             android:clickable="true"
-            android:src="@drawable/ic_event_close"
+            android:src="@drawable/ic_fab_close"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
