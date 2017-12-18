@@ -10,16 +10,17 @@ import android.location.Geocoder;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.Nullable;
-import android.util.Log;
+import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -28,22 +29,23 @@ import java.util.List;
 import java.util.Locale;
 
 public class AddEventFragment extends Fragment {
-    View myView;
-
-    EditText text_name;
-    EditText text_address;
-    EditText text_startDate;
-    EditText text_endDate;
-    EditText text_startTime;
-    EditText text_endTime;
-    Button button_add;
-
+    private View myView;
+    private EditText text_name;
+    private EditText text_desc;
+    private EditText text_address;
+    private EditText text_startDate;
+    private EditText text_endDate;
+    private EditText text_startTime;
+    private EditText text_endTime;
+    private FloatingActionButton fab_addevent;
+    private FloatingActionButton fab_closeevent;
     private Calendar mStartDate = Calendar.getInstance();
     private Calendar mEndDate = Calendar.getInstance();
     private Calendar mStartTime = Calendar.getInstance();
     private Calendar mEndTime = Calendar.getInstance();
 
-    public AddEventFragment() {}
+    final FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference events = database.getReference("events");
 
     @Nullable
     @Override
@@ -51,12 +53,14 @@ public class AddEventFragment extends Fragment {
         myView = inflater.inflate(R.layout.fragment_add_event, container, false);
 
         text_name = (EditText) myView.findViewById(R.id.et_name);
+        text_desc = (EditText) myView.findViewById(R.id.et_desc);
         text_address = (EditText) myView.findViewById(R.id.et_address);
         text_startDate = (EditText) myView.findViewById(R.id.et_startdate);
         text_endDate = (EditText) myView.findViewById(R.id.et_enddate);
         text_startTime = (EditText) myView.findViewById(R.id.et_starttime);
         text_endTime = (EditText) myView.findViewById(R.id.et_endtime);
-        button_add = (Button) myView.findViewById(R.id.bt_add);
+        fab_addevent = (FloatingActionButton) myView.findViewById(R.id.fab_addevent);
+        fab_closeevent = (FloatingActionButton) myView.findViewById(R.id.fab_closeevent);
 
         text_startDate.setTextIsSelectable(true);
         text_endDate.setTextIsSelectable(true);
@@ -67,12 +71,12 @@ public class AddEventFragment extends Fragment {
         this.initializeEndDatePicker();
         this.initializeStartTimePicker();
         this.initializeEndTimePicker();
-        this.initializeButton();
+        this.initializeButtons();
 
         return myView;
     }
 
-    public void alertDialog(String title, String content, String validation){
+    private void alertDialog(String title, String content, String validation){
         AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
         alertDialog.setTitle(title);
         alertDialog.setMessage(content);
@@ -85,7 +89,7 @@ public class AddEventFragment extends Fragment {
         alertDialog.show();
     }
 
-    public void initializeStartDatePicker(){
+    private void initializeStartDatePicker(){
         final DatePickerDialog.OnDateSetListener startdate = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -108,7 +112,7 @@ public class AddEventFragment extends Fragment {
         });
     }
 
-    public void initializeEndDatePicker(){
+    private void initializeEndDatePicker(){
         final DatePickerDialog.OnDateSetListener enddate = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -131,7 +135,7 @@ public class AddEventFragment extends Fragment {
         });
     }
 
-    public void initializeStartTimePicker(){
+    private void initializeStartTimePicker(){
         final TimePickerDialog.OnTimeSetListener starttime = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -152,7 +156,7 @@ public class AddEventFragment extends Fragment {
         });
     }
 
-    public void initializeEndTimePicker(){
+    private void initializeEndTimePicker(){
         final TimePickerDialog.OnTimeSetListener endtime = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -173,36 +177,50 @@ public class AddEventFragment extends Fragment {
         });
     }
 
-    public void initializeButton(){
-        button_add.setOnClickListener(new View.OnClickListener() {
+    private void initializeButtons(){
+        fab_addevent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 sendEvent();
+                MainActivity ma = ((MainActivity) getActivity());
+                ma.getFragmentManager().beginTransaction().replace(R.id.content_frame, ma.mapEventFragment).commit();
+            }
+        });
+
+        fab_closeevent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity ma = ((MainActivity) getActivity());
+                ma.getFragmentManager().beginTransaction().replace(R.id.content_frame, ma.mapEventFragment).commit();
             }
         });
     }
 
-    public void sendEvent(){
+    private void sendEvent(){
         String name = text_name.getText().toString();
+        String description = text_desc.getText().toString();
         String address = text_address.getText().toString();
         String startDate = text_startDate.getText().toString();
         String endDate = text_endDate.getText().toString();
         String startTime = text_startTime.getText().toString();
         String endTime = text_endTime.getText().toString();
-
         LatLng position = getLocationFromAddress(getContext(), address);
 
         if(position != null){
-
-        //    ((MainActivity) getActivity()).addEvent(name, startDate, startTime, endDate, endTime, position);
-
+            new Event(name);
+            events.child(name).child("description").setValue(description);
+            events.child(name).child("position").setValue(position);
+            events.child(name).child("address").setValue(address);
+            events.child(name).child("start").child("date").setValue(startDate);
+            events.child(name).child("start").child("time").setValue(startTime);
+            events.child(name).child("end").child("date").setValue(endDate);
+            events.child(name).child("end").child("time").setValue(endTime);
         } else {
-            this.alertDialog("Incorrect address", "The address you typed is incorrect, please retry.", "OK");
+            this.alertDialog(getString(R.string.event_incorrectaddress), getString(R.string.event_incorrectaddressdesc), getString(R.string.event_ok));
         }
-
     }
 
-    public LatLng getLocationFromAddress(Context context, String address) {
+    private LatLng getLocationFromAddress(Context context, String address) {
         Geocoder geocoder = new Geocoder(context);
         List<Address> result;
         LatLng position = null;
@@ -210,19 +228,20 @@ public class AddEventFragment extends Fragment {
         try {
             result = geocoder.getFromLocationName(address, 1);
             if (address == null) {
-                return null;
+                position = null;
             }
-            Address location = result.get(0);
-            location.getLatitude();
-            location.getLongitude();
-
-            position = new LatLng(location.getLatitude(), location.getLongitude() );
+            if (result != null){
+                Address location = result.get(0);
+                location.getLatitude();
+                location.getLongitude();
+                position = new LatLng(location.getLatitude(), location.getLongitude() );
+            } else {
+                position = null;
+            }
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-
         return position;
     }
-
 }
 
