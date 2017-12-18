@@ -18,4 +18,7 @@ public class FriendsFragment extends Fragment {
         myView = inflater.inflate(R.layout.fragment_friends, container, false);
         return myView;
     }
+
+
+
 }
