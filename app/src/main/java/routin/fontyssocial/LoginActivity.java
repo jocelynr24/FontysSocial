@@ -29,6 +29,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import model.User;
+
 /**
  * Created by conte on 30/11/2017.
  */
@@ -51,7 +53,6 @@ public class LoginActivity extends AppCompatActivity {
         LoginActivity.context = getApplicationContext();
         mail_account = findViewById(R.id.email);
         password = findViewById(R.id.password);
-        //Get Firebase auth instance
         auth = FirebaseAuth.getInstance();
         addAdapterToViews();
 
@@ -90,7 +91,7 @@ public class LoginActivity extends AppCompatActivity {
                                                 //Log.w(TAG, "createUserWithEmail:failure", task.getException());
                                                 Toast.makeText(LoginActivity.this, "Authentication failed.",
                                                         Toast.LENGTH_SHORT).show();
-                                                updateUI(null);
+                                               // updateUI(null);
                                             }
 
                                             // ...

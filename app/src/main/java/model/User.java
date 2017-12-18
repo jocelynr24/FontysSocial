@@ -1,4 +1,4 @@
-package routin.fontyssocial;
+package model;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -21,6 +21,7 @@ public class User {
         if (ref.child(username) == null){
             ref.child(username).child("latitude").setValue(51.441642);
             ref.child(username).child("longitude").setValue(5.3697225);
+
         }
     }
 
