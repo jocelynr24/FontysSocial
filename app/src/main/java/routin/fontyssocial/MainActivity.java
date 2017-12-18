@@ -32,7 +32,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public AddEventFragment addEventFragment;
     public NotificationsFragment notificationsFragment;
     public FriendsFragment friendsFragment;
-    public SettingsFragment settingsFragment;
     public ProfileFragment profileFragment;
     public FloatingActionButton fab;
 
@@ -63,7 +62,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             addEventFragment = new AddEventFragment();
             notificationsFragment = new NotificationsFragment();
             friendsFragment = new FriendsFragment();
-            settingsFragment = new SettingsFragment();
             profileFragment = new ProfileFragment();
 
             // We set the map fragment as default
@@ -94,9 +92,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.nav_friends:
                 getFragmentManager().beginTransaction().replace(R.id.content_frame, friendsFragment).commit();
-                break;
-            case R.id.nav_settings:
-                getFragmentManager().beginTransaction().replace(R.id.content_frame, settingsFragment).commit();
                 break;
             case R.id.nav_profile:
                 getFragmentManager().beginTransaction().replace(R.id.content_frame, profileFragment).commit();
