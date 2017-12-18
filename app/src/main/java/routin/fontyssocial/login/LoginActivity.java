@@ -1,4 +1,4 @@
-package routin.fontyssocial;
+package routin.fontyssocial.login;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -29,7 +29,9 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import model.User;
+import routin.fontyssocial.R;
+import routin.fontyssocial.main.MainActivity;
+import routin.fontyssocial.model.User;
 
 /**
  * Created by conte on 30/11/2017.

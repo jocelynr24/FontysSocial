@@ -1,4 +1,4 @@
-package routin.fontyssocial;
+package routin.fontyssocial.fragments;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -12,7 +12,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
@@ -44,13 +43,15 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.DecimalFormat;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
-import model.User;
-import modelGoogle.DistanceGoogleMatrix;
+import routin.fontyssocial.R;
+import routin.fontyssocial.main.MainActivity;
+import routin.fontyssocial.model.Event;
+import routin.fontyssocial.model.User;
+import routin.fontyssocial.modelGoogle.DistanceGoogleMatrix;
 
 import static android.content.Context.LOCATION_SERVICE;
 
@@ -58,20 +59,20 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
     private View myView;
     private GoogleMap mMap;
     private LocationManager mLocationManager;
-    public FloatingActionButton fab_createevent;
     private Marker mLocationMarker = null;
     private Location mLocation = null;
+
     private FirebaseAuth auth;
-    final FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference ref = database.getReference("users");
-    DatabaseReference events = database.getReference("events");
+    private final FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private DatabaseReference ref = database.getReference("users");
+    private DatabaseReference events = database.getReference("events");
+
+    private static DecimalFormat decimalFormat = new DecimalFormat(".##");
+    private Gson gson = new Gson();
 
     private Map<String,Object> users = new HashMap<>();
     private HashMap<Marker, String[]> eventsInfos = new HashMap<Marker, String[]>();
     
-    private String apiKeyMapDistance="AIzaSyDeKvB4UAJRjhhGgQg_G5EmcA7OHQQgRMM";
-    private static DecimalFormat decimalFormat = new DecimalFormat(".##");
-    private Gson gson = new Gson();
 
     private final LocationListener mLocationListener = new LocationListener() {
         @Override
@@ -107,8 +108,6 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
                     addMarker(latitude, longitude, name,distance);
                 }
             }
-
-
         }
 
         @Override
@@ -132,7 +131,7 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
         auth = FirebaseAuth.getInstance();
 
         // The floating action button to add events
-        fab_createevent = (FloatingActionButton) myView.findViewById(R.id.fab_createevent);
+        FloatingActionButton fab_createevent = (FloatingActionButton) myView.findViewById(R.id.fab_createevent);
         fab_createevent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -334,15 +333,15 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(position, 15));
     }
 
-<<<<<<< app/src/main/java/routin/fontyssocial/MapEventFragment.java
     public boolean permissionsGranted() {
         if (ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             return true;
         } else {
             return false;
         }
-=======
-    private Location getLastKnownLocation() {
+    }
+
+    private Location getLastKnownLocation(){
         mLocationManager = (LocationManager)getActivity().getSystemService(LOCATION_SERVICE);
         List<String> providers = mLocationManager.getProviders(true);
         Location location = null;
@@ -367,6 +366,7 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
             StringBuffer chainResult = new StringBuffer("");
             try {
                 URL url = null;
+                String apiKeyMapDistance = "AIzaSyDeKvB4UAJRjhhGgQg_G5EmcA7OHQQgRMM";
                 url = new URL("https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins="
                         + params[0] + "," + params[1] + "&destinations=" + params[2] + "," + params[3] + "&key=" + apiKeyMapDistance);
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();

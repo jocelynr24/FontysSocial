@@ -1,4 +1,4 @@
-package routin.fontyssocial;
+package routin.fontyssocial.fragments;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -27,6 +27,10 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+
+import routin.fontyssocial.R;
+import routin.fontyssocial.main.MainActivity;
+import routin.fontyssocial.model.Event;
 
 public class AddEventFragment extends Fragment {
     private View myView;

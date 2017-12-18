@@ -1,4 +1,4 @@
-package routin.fontyssocial;
+package routin.fontyssocial.fragments;
 
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -16,6 +16,8 @@ import android.widget.RadioButton;
 import android.widget.Spinner;
 
 import java.util.Locale;
+
+import routin.fontyssocial.R;
 
 public class ProfileFragment extends Fragment {
     private View myView;
