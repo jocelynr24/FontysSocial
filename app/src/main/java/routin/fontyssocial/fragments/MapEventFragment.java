@@ -209,32 +209,32 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        //Get map of users in datasnapshot
-                        Map<String, Object> events = (Map<String, Object>) dataSnapshot.getValue();
+                        if(dataSnapshot.exists()){
+                            Map<String, Object> events = (Map<String, Object>) dataSnapshot.getValue();
 
-                        for (Map.Entry<String, Object> entry : events.entrySet()) {
+                            for (Map.Entry<String, Object> entry : events.entrySet()) {
 
-                            String ID = entry.toString().split("=")[0];
+                                String ID = entry.toString().split("=")[0];
 
-                            if (!ID.equals(Event.getInstance().getID())) {
-                                //Get user map
-                                Map singleEvent = (Map) entry.getValue();
-                                //Get phone field and append to list
+                                if (!ID.equals(Event.getInstance().getID())) {
+                                    Map singleEvent = (Map) entry.getValue();
 
-                                String name = (String) ((Map) singleEvent.get("info")).get("name");
-                                String description = (String) ((Map) singleEvent.get("info")).get("description");
-                                String address = (String) ((Map) singleEvent.get("info")).get("address");
-                                double latitude = (double) ((Map) singleEvent.get("position")).get("latitude");
-                                double longitude = (double) ((Map) singleEvent.get("position")).get("longitude");
-                                String startDate = (String) ((Map) singleEvent.get("start")).get("date");
-                                String startTime = (String) ((Map) singleEvent.get("start")).get("time");
-                                String endDate = (String) ((Map) singleEvent.get("end")).get("date");
-                                String endTime = (String) ((Map) singleEvent.get("end")).get("time");
+                                    String name = (String) ((Map) singleEvent.get("info")).get("name");
+                                    String description = (String) ((Map) singleEvent.get("info")).get("description");
+                                    String address = (String) ((Map) singleEvent.get("info")).get("address");
+                                    double latitude = (double) ((Map) singleEvent.get("position")).get("latitude");
+                                    double longitude = (double) ((Map) singleEvent.get("position")).get("longitude");
+                                    String startDate = (String) ((Map) singleEvent.get("start")).get("date");
+                                    String startTime = (String) ((Map) singleEvent.get("start")).get("time");
+                                    String endDate = (String) ((Map) singleEvent.get("end")).get("date");
+                                    String endTime = (String) ((Map) singleEvent.get("end")).get("time");
 
-                                Marker marker = addEventMarker(latitude, longitude, name, description);
-                                eventsInfos.put(marker, new String[]{name, address, startDate, startTime, endDate, endTime});
+                                    Marker marker = addEventMarker(latitude, longitude, name, description);
+                                    eventsInfos.put(marker, new String[]{name, address, startDate, startTime, endDate, endTime});
+                                }
                             }
                         }
+
                     }
 
                     @Override
