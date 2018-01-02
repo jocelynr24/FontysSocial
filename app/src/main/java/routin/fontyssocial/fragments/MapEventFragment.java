@@ -214,15 +214,16 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
 
                         for (Map.Entry<String, Object> entry : events.entrySet()) {
 
-                            String name = entry.toString().split("=")[0];
+                            String ID = entry.toString().split("=")[0];
 
-                            if (!name.equals(Event.getInstance().getName())) {
+                            if (!ID.equals(Event.getInstance().getID())) {
                                 //Get user map
                                 Map singleEvent = (Map) entry.getValue();
                                 //Get phone field and append to list
 
-                                String description = (String) singleEvent.get("description");
-                                String address = (String) singleEvent.get("address");
+                                String name = (String) ((Map) singleEvent.get("info")).get("name");
+                                String description = (String) ((Map) singleEvent.get("info")).get("description");
+                                String address = (String) ((Map) singleEvent.get("info")).get("address");
                                 double latitude = (double) ((Map) singleEvent.get("position")).get("latitude");
                                 double longitude = (double) ((Map) singleEvent.get("position")).get("longitude");
                                 String startDate = (String) ((Map) singleEvent.get("start")).get("date");
