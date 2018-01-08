@@ -46,4 +46,13 @@
     <string name="permission_locationok">OK</string>
     <string name="profile_en">Anglais</string>
     <string name="profile_fr">Français</string>
+    <string name="profile_title">Paramètres du profil</string>
+    <string name="profile_firstname">Prénom :</string>
+    <string name="profile_firstnameinput">Prénom</string>
+    <string name="profile_lastname">Nom de famille :</string>
+    <string name="profile_lastnameinput">Nom de famille</string>
+    <string name="profile_shareposition">Partager votre position aux autres :</string>
+    <string name="profile_sharepositionyes">Oui, je veux partager ma position</string>
+    <string name="profile_sharepositionno">Non, je ne veux pas partager ma position</string>
+    <string name="profile_language">Langue de l\'application :</string>
 </resources>

@@ -55,4 +55,13 @@
     <!-- Strings related to profile settings -->
     <string name="profile_en">English</string>
     <string name="profile_fr">French</string>
+    <string name="profile_title">Profile settings</string>
+    <string name="profile_firstname">First name:</string>
+    <string name="profile_firstnameinput">First name</string>
+    <string name="profile_lastname">Last name:</string>
+    <string name="profile_lastnameinput">Last name</string>
+    <string name="profile_shareposition">Share your position to others:</string>
+    <string name="profile_sharepositionyes">Yes, I want to share my position</string>
+    <string name="profile_sharepositionno">No, I don\'t want to share my position</string>
+    <string name="profile_language">Language of the app:</string>
 </resources>
