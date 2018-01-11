@@ -85,7 +85,9 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view){
                 Intent intent = new Intent(LoginActivity.this,SignUpActivity.class);
+                finish();
                 startActivity(intent);
+
             }
         });
     }
@@ -93,6 +95,7 @@ public class LoginActivity extends AppCompatActivity {
     private void updateUI(FirebaseUser user) {
         User u = new User(user.getEmail().split("@")[0]);
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        finish();
         startActivity(intent);
     }
 

@@ -88,7 +88,7 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback {
                         locations[1]=mLocation.getLongitude()+"";
                         locations[2]=latitude+"";
                         locations[3]=longitude+"";
-                        HttpGetRequest getRequest = new HttpGetRequest();
+                        HttpGetRequest getRequest = new HttpGetRequest(latitude, longitude, name);
                         distance = Double.parseDouble(getRequest.execute(locations).get());
                     } catch ( InterruptedException | ExecutionException e) {
                         e.printStackTrace();
@@ -162,19 +162,12 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback {
 
                                 double latitude = (double) singleUser.get("latitude");
                                 double longitude = (double) singleUser.get("longitude");
-                                Double distance= null;
-                                try {
-                                    String[] locations = new String[5];
-                                    locations[0] = mLocation.getLatitude() + "";
-                                    locations[1] = mLocation.getLongitude() + "";
-                                    locations[2] = latitude + "";
-                                    locations[3] = longitude + "";
-                                    HttpGetRequest getRequest = new HttpGetRequest();
-                                    distance = Double.parseDouble(getRequest.execute(locations).get());
-                                } catch (InterruptedException | ExecutionException e) {
-                                    e.printStackTrace();
-                                }
-                                addMarker(latitude, longitude, name,distance);
+                                String[] locations = new String[5];
+                                locations[0] = mLocation.getLatitude() + "";
+                                locations[1] = mLocation.getLongitude() + "";
+                                locations[2] = latitude + "";
+                                locations[3] = longitude + "";
+                                HttpGetRequest getRequest = new HttpGetRequest(latitude, longitude, name);
                             }
                         }
                     }
@@ -259,6 +252,17 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback {
     }
 
     public class HttpGetRequest extends AsyncTask<String, Void, String> {
+
+        private double latitude;
+        private double longitude;
+        private String name;
+
+        public HttpGetRequest(double latitude,double longitude, String name){
+            this.latitude=latitude;
+            this.longitude=longitude;
+            this.name=name;
+        }
+
         @Override
         protected String doInBackground(String[] params) {
             StringBuffer chainResult = new StringBuffer("");
@@ -289,6 +293,8 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback {
 
         protected void onPostExecute(String result){
             super.onPostExecute(result);
+            Double distance = Double.parseDouble(result);
+            addMarker(latitude, longitude, name,distance);
         }
     }
 }
