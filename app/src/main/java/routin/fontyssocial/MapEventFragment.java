@@ -14,6 +14,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +41,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,6 +56,7 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap mMap;
     private LocationManager mLocationManager;
     private Marker mLocationMarker = null;
+    private List<Marker> markers = new ArrayList<>();
     private Location mLocation = null;
     private FirebaseAuth auth;
     final FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -66,38 +69,40 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback {
         @Override
         public void onLocationChanged(final Location location) {
             mLocation = location;
-            mMap.clear();
             ref.child(User.getInstance().getName()).child("latitude").setValue(location.getLatitude());
             ref.child(User.getInstance().getName()).child("longitude").setValue(location.getLongitude());
 
-            for (Map.Entry<String, Object> entry : users.entrySet()){
+            /*mMap.clear();
+            markers.clear();
+
+            for (Map.Entry<String, Object> entry : users.entrySet()) {
 
                 String name = entry.toString().split("=")[0];
 
-                if (!name.equals(User.getInstance().getName())){
+                if (!name.equals(User.getInstance().getName())) {
                     //Get user map
                     Map singleUser = (Map) entry.getValue();
                     //Get phone field and append to list
 
-                    double latitude = (double) singleUser.get("latitude");
-                    double longitude = (double) singleUser.get("longitude");
-                    Double distance= null;
+                    Long lat = (Long) singleUser.get("latitude");
+                    double latitude = lat.doubleValue();
+                    Long longi = (Long) singleUser.get("longitude");
+                    double longitude = longi.doubleValue();
+                    Double distance = null;
                     try {
-                        String [] locations = new String[5];
-                        locations[0]=mLocation.getLatitude()+"";
-                        locations[1]=mLocation.getLongitude()+"";
-                        locations[2]=latitude+"";
-                        locations[3]=longitude+"";
+                        String[] locations = new String[5];
+                        locations[0] = mLocation.getLatitude() + "";
+                        locations[1] = mLocation.getLongitude() + "";
+                        locations[2] = latitude + "";
+                        locations[3] = longitude + "";
                         HttpGetRequest getRequest = new HttpGetRequest();
                         distance = Double.parseDouble(getRequest.execute(locations).get());
-                    } catch ( InterruptedException | ExecutionException e) {
+                    } catch (InterruptedException | ExecutionException e) {
                         e.printStackTrace();
                     }
-                    addMarker(latitude, longitude, name,distance);
+                    addMarker(latitude, longitude, name, distance);
                 }
-            }
-
-
+            }*/
         }
 
         @Override
@@ -149,6 +154,10 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         //Get map of users in datasnapshot
+
+                        mMap.clear();
+                        markers.clear();
+
                         users = (Map<String,Object>) dataSnapshot.getValue();
 
                         for (Map.Entry<String, Object> entry : users.entrySet()){
@@ -162,6 +171,7 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback {
 
                                 double latitude = (double) singleUser.get("latitude");
                                 double longitude = (double) singleUser.get("longitude");
+
                                 Double distance= null;
                                 try {
                                     String[] locations = new String[5];
@@ -174,7 +184,8 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback {
                                 } catch (InterruptedException | ExecutionException e) {
                                     e.printStackTrace();
                                 }
-                                addMarker(latitude, longitude, name,distance);
+                                Marker marker = addMarker(latitude, longitude, name,distance);
+                                markers.add(marker);
                             }
                         }
                     }
@@ -207,6 +218,7 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback {
         Marker marker;
 
         position = new LatLng(latitude, longitude);
+
         if(distance>=1) {
             marker = mMap.addMarker(new MarkerOptions().position(position)
                     .title(text)

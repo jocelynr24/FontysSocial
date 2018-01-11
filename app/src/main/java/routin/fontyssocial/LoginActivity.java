@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -91,7 +92,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void updateUI(FirebaseUser user) {
-        User u = new User(user.getEmail().split("@")[0]);
+        User u = new User(user.getEmail());
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
     }
