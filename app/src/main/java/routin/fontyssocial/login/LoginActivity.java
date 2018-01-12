@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -30,6 +31,7 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 import routin.fontyssocial.R;
+import routin.fontyssocial.SignUpActivity;
 import routin.fontyssocial.main.MainActivity;
 import routin.fontyssocial.model.User;
 
@@ -63,9 +65,9 @@ public class LoginActivity extends AppCompatActivity {
             updateUI(user);
         }
 
-        Button signOrCreate = findViewById(R.id.email_sign_in_button);
+        Button signIn = findViewById(R.id.sign_in);
 
-        signOrCreate.setOnClickListener(new View.OnClickListener() {
+        signIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 auth.signInWithEmailAndPassword(mail_account.getText().toString(),password.getText().toString())
@@ -79,41 +81,35 @@ public class LoginActivity extends AppCompatActivity {
                                     updateUI(user);
                                 } else {
                                     // If sign in fails, display a message to the user.
-
-                                    auth.createUserWithEmailAndPassword(mail_account.getText().toString(),password.getText().toString()).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<AuthResult> task) {
-                                            if (task.isSuccessful()) {
-                                                // Sign in success, update UI with the signed-in user's information
-                                                // Log.d(TAG, "createUserWithEmail:success");
-                                                FirebaseUser user = auth.getCurrentUser();
-                                                updateUI(user);
-                                            } else {
-                                                // If sign in fails, display a message to the user.
-                                                //Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                                                Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                                        Toast.LENGTH_SHORT).show();
-                                               // updateUI(null);
-                                            }
-
-                                            // ...
-                                        }
-                                    });
+                                    Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                            Toast.LENGTH_SHORT).show();
                                 }
-
-                                // ...
                             }
                         });
             }
         });
 
+        Button signUp = findViewById(R.id.sign_up);
+        signUp.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view){
+                Intent intent = new Intent(LoginActivity.this,SignUpActivity.class);
+                finish();
+                startActivity(intent);
+
+            }
+        });
+
         // Ask permissions
         askPermissions();
+
     }
 
     private void updateUI(FirebaseUser user) {
-        User u = new User(user.getEmail().split("@")[0]);
+        User u = new User(user.getEmail());
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        finish();
         startActivity(intent);
     }
 

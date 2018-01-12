@@ -99,6 +99,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 auth.signOut();
                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(intent);
+                finish();
                 break;
         }
 

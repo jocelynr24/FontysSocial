@@ -20,6 +20,9 @@
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
+    <string name="pseudo">Pseudo</string>
+    <string name="password">Password</string>
+    <string name="password_check">Password Validation</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email completions."</string>
     <string name="title_activity_login2">Sign in</string>
 
@@ -55,4 +58,13 @@
     <!-- Strings related to profile settings -->
     <string name="profile_en">English</string>
     <string name="profile_fr">French</string>
+    <string name="profile_title">Profile settings</string>
+    <string name="profile_firstname">First name:</string>
+    <string name="profile_firstnameinput">First name</string>
+    <string name="profile_lastname">Last name:</string>
+    <string name="profile_lastnameinput">Last name</string>
+    <string name="profile_shareposition">Share your position to others:</string>
+    <string name="profile_sharepositionyes">Yes, I want to share my position</string>
+    <string name="profile_sharepositionno">No, I don\'t want to share my position</string>
+    <string name="profile_language">Language of the app:</string>
 </resources>

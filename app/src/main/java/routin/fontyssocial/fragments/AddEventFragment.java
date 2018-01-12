@@ -25,6 +25,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -211,14 +212,19 @@ public class AddEventFragment extends Fragment {
         LatLng position = getLocationFromAddress(getContext(), address);
 
         if(position != null){
-            new Event(name);
-            events.child(name).child("description").setValue(description);
-            events.child(name).child("position").setValue(position);
-            events.child(name).child("address").setValue(address);
-            events.child(name).child("start").child("date").setValue(startDate);
-            events.child(name).child("start").child("time").setValue(startTime);
-            events.child(name).child("end").child("date").setValue(endDate);
-            events.child(name).child("end").child("time").setValue(endTime);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMyyyyHHmmssSS");
+            Date currentDate = new Date();
+            String ID = dateFormat.format(currentDate);
+            new Event(ID);
+
+            events.child(ID).child("info").child("name").setValue(name);
+            events.child(ID).child("info").child("description").setValue(description);
+            events.child(ID).child("position").setValue(position);
+            events.child(ID).child("info").child("address").setValue(address);
+            events.child(ID).child("start").child("date").setValue(startDate);
+            events.child(ID).child("start").child("time").setValue(startTime);
+            events.child(ID).child("end").child("date").setValue(endDate);
+            events.child(ID).child("end").child("time").setValue(endTime);
         } else {
             this.alertDialog(getString(R.string.event_incorrectaddress), getString(R.string.event_incorrectaddressdesc), getString(R.string.event_ok));
         }

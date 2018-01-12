@@ -11,6 +11,7 @@
     tools:context="routin.fontyssocial.login.LoginActivity">
 
     <!-- Login progress -->
+
     <ProgressBar
         android:id="@+id/login_progress"
         style="?android:attr/progressBarStyleLarge"
@@ -41,8 +42,8 @@
                     android:hint="@string/prompt_email"
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
-                    android:singleLine="true"
-                    android:popupBackground="#000000"/>
+                    android:popupBackground="#000000"
+                    android:singleLine="true" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -62,17 +63,48 @@
                     android:maxLines="1"
                     android:singleLine="true" />
 
+
+
             </android.support.design.widget.TextInputLayout>
 
-            <Button
-                android:id="@+id/email_sign_in_button"
-                style="?android:textAppearanceSmall"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/action_sign_in"
-                android:textStyle="bold" />
+                android:layout_height="327dp">
 
+
+
+
+                <Button
+                    android:id="@+id/sign_in"
+                    style="?android:textAppearanceSmall"
+                    android:layout_width="300dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="36dp"
+                    android:layout_marginTop="41dp"
+                    android:text="Sign in"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/sign_up"
+                    style="?android:textAppearanceSmall"
+                    android:layout_width="100dp"
+                    android:layout_height="45dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:text="Sign up"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@+id/sign_up"
+                    android:text="If you havn't an account click on sign up button: "
+                    android:textStyle="bold" />
+            </RelativeLayout>
         </LinearLayout>
+
+
     </ScrollView>
 </LinearLayout>
