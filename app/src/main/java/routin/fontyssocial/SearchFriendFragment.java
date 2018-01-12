@@ -1,7 +1,6 @@
 package routin.fontyssocial;
 
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -23,7 +22,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.HashMap;
 import java.util.Map;
 
-import model.User;
+import routin.fontyssocial.model.User;
+
 
 /**
  * Created by conte on 31/12/2017.
