@@ -1,4 +1,4 @@
-package routin.fontyssocial;
+package routin.fontyssocial.fragments;
 
 import android.os.Bundle;
 import android.app.Fragment;
@@ -7,15 +7,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class SettingsFragment extends Fragment {
+import routin.fontyssocial.R;
+
+public class NotificationsFragment extends Fragment {
     View myView;
 
-    public SettingsFragment() {}
+    public NotificationsFragment() {}
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        myView = inflater.inflate(R.layout.fragment_settings, container, false);
+        myView = inflater.inflate(R.layout.fragment_notifications, container, false);
         return myView;
     }
 }

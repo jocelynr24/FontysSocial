@@ -2,9 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="routin.fontyssocial.FriendsFragment">
-
-    <!-- TODO: Update blank fragment layout -->
+    tools:context="routin.fontyssocial.fragments.FriendsFragment">
 
     <!--<TextView-->
         <!--android:id="@+id/textView"-->

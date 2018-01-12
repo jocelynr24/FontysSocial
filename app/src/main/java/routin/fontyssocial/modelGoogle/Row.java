@@ -1,4 +1,4 @@
-package modelGoogle;
+package routin.fontyssocial.modelGoogle;
 
 import java.util.Arrays;
 

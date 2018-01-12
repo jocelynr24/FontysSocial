@@ -1,4 +1,4 @@
-package model;
+package routin.fontyssocial.model;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;

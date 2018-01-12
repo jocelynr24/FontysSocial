@@ -6,6 +6,7 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_map"
+            android:checked="true"
             android:icon="@drawable/ic_menu_map"
             android:title="@string/action_map" />
         <item
@@ -16,10 +17,6 @@
             android:id="@+id/nav_friends"
             android:icon="@drawable/ic_menu_friends"
             android:title="@string/action_friends" />
-        <item
-            android:id="@+id/nav_settings"
-            android:icon="@drawable/ic_menu_settings"
-            android:title="@string/action_settings" />
         <item
             android:id="@+id/nav_profile"
             android:icon="@drawable/ic_menu_profile"
