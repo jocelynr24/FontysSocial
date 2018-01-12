@@ -125,7 +125,9 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void updateUI(FirebaseUser user) {
-        String t=name.getText().toString();
+        String pseudo = name.getText().toString();
+        String mail = mail_account.getText().toString();
+        User u = new User(pseudo, mail);
         Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
         startActivity(intent);
     }
