@@ -32,6 +32,7 @@ import java.util.Locale;
 import routin.fontyssocial.R;
 import routin.fontyssocial.main.MainActivity;
 import routin.fontyssocial.model.Event;
+import routin.fontyssocial.model.User;
 
 public class AddEventFragment extends Fragment {
     private View myView;
@@ -204,6 +205,7 @@ public class AddEventFragment extends Fragment {
     private void sendEvent(){
         String name = text_name.getText().toString();
         String description = text_desc.getText().toString();
+        String owner = User.getInstance().getName();
         String address = text_address.getText().toString();
         String startDate = text_startDate.getText().toString();
         String endDate = text_endDate.getText().toString();
@@ -219,6 +221,7 @@ public class AddEventFragment extends Fragment {
 
             events.child(ID).child("info").child("name").setValue(name);
             events.child(ID).child("info").child("description").setValue(description);
+            events.child(ID).child("info").child("owner").setValue(owner);
             events.child(ID).child("position").setValue(position);
             events.child(ID).child("info").child("address").setValue(address);
             events.child(ID).child("start").child("date").setValue(startDate);

@@ -187,7 +187,6 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
 
                         Map<String, Object> users = (Map<String, Object>) dataSnapshot.getValue();
 
-                        mMap.clear();
                         markers.clear();
 
                         for (Map.Entry<String, Object> entry : users.entrySet()) {
