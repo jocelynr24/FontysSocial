@@ -10,11 +10,12 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class Event {
     private static Event INSTANCE = null;
-    final FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference ref = database.getReference("events");
+    //final FirebaseDatabase database = FirebaseDatabase.getInstance();
+    //DatabaseReference ref = database.getReference("events");
     private String ID;
     private String name;
     private String description;
+    private String address;
     private LatLng position;
     private String startDate;
     private String endDate;
@@ -24,17 +25,25 @@ public class Event {
     public Event(String ID){
         INSTANCE = this;
         this.ID = ID;
+    }
 
-        if (ref.child(ID) == null){
-            ref.child(ID).child("info").child("name").setValue("");
-            ref.child(ID).child("info").child("description").setValue("");
-            ref.child(ID).child("info").child("address").setValue("");
-            ref.child(ID).child("position").setValue(new LatLng(0.0, 0.0));
-            ref.child(ID).child("start").child("date").setValue("01/01/1970");
-            ref.child(ID).child("start").child("time").setValue("00:00");
-            ref.child(ID).child("end").child("date").setValue("01/01/1970");
-            ref.child(ID).child("end").child("time").setValue("00:00");
+    public Event(String ID, String name, String description, String address, LatLng position, String startDate, String endDate, String startTime, String endTime){
+        this.ID = ID;
+        this.name = name;
+        this.description = description;
+        this.address = address;
+        this.position = position;
+
+        if(startDate.matches("^(0[1-9]|1[0-9]|2[0-9]|3[0-1])\\/(0[1-9]|1[0-2])\\/([0-9]{2})$") && endDate.matches("^(0[1-9]|1[0-9]|2[0-9]|3[0-1])\\/(0[1-9]|1[0-2])\\/([0-9]{2})$")
+                && startTime.matches("^(0[0-9]|1[0-9]|2[0-3]):(0[0-9]|1[0-9]|2[0-9]|3[0-9]|4[0-9]|5[0-9])$") && endTime.matches("^(0[0-9]|1[0-9]|2[0-3]):(0[0-9]|1[0-9]|2[0-9]|3[0-9]|4[0-9]|5[0-9])$")){
+            this.startDate = startDate;
+            this.endDate = endDate;
+            this.startTime = startTime;
+            this.endTime = endTime;
+        } else {
+            throw new IllegalArgumentException("Wrong date or time format.");
         }
+
     }
 
     public String getID() {
@@ -59,6 +68,14 @@ public class Event {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public LatLng getPosition() {

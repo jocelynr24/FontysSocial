@@ -272,7 +272,6 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
                             dialog.dismiss();
                         }
                     });
-            // todo: the event can be only removed by the owner of the event
             if(User.getInstance().getName().equals(eventsInfos.get(marker)[3])){
             alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getText(R.string.mapevent_remove),
                     new DialogInterface.OnClickListener() {
@@ -314,7 +313,6 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
                     .title(text)
                     .snippet("0"+decimalFormat.format(distance) + " km"));
         }
-        //mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(position, 15));
 
         return marker;
     }
@@ -323,7 +321,6 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
         Marker marker;
 
         marker = mMap.addMarker(new MarkerOptions().position(position).title(text));
-        //mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(position, 15));
 
         return marker;
     }
