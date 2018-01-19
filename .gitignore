@@ -1,1 +1,15 @@
-
+*.iml
+.gradle
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+<<<<<<< HEAD
+=======
+.idea/vcs.xml
+.idea/modules.xml
+>>>>>>> Julien
+app/app.iml
