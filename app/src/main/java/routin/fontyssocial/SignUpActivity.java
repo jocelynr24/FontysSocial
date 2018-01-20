@@ -105,7 +105,7 @@ public class SignUpActivity extends AppCompatActivity {
                             updateUI(user);
                         } else {
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(SignUpActivity.this, "Sign up failed.",
+                            Toast.makeText(SignUpActivity.this, getString(R.string.sign_failed),
                                     Toast.LENGTH_SHORT).show();
                         }
 

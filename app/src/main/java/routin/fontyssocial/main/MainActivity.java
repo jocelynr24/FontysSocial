@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -31,8 +30,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public NotificationsFragment notificationsFragment;
     public FriendsFragment friendsFragment;
     public ProfileFragment profileFragment;
-    public FloatingActionButton fab;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

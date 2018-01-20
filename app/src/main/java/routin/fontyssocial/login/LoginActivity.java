@@ -81,7 +81,7 @@ public class LoginActivity extends AppCompatActivity {
                                     updateUI(user);
                                 } else {
                                     // If sign in fails, display a message to the user.
-                                    Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                    Toast.makeText(LoginActivity.this, getString(R.string.auth_failed),
                                             Toast.LENGTH_SHORT).show();
                                 }
                             }
@@ -97,7 +97,6 @@ public class LoginActivity extends AppCompatActivity {
                 Intent intent = new Intent(LoginActivity.this,SignUpActivity.class);
                 finish();
                 startActivity(intent);
-
             }
         });
 
