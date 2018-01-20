@@ -6,7 +6,7 @@
     <string name="action_friends">Amis</string>
     <string name="action_profile">Profil</string>
     <string name="action_logout">Déconnexion</string>
-    <string name="app_subtitle">Votre planificateur d\'événement personnel</string>
+    <string name="app_subtitle">Suivez tous les événements !</string>
     <string name="navigation_drawer_open">Ouvrir le volet de navigation</string>
     <string name="navigation_drawer_close">Fermer le volet de navigation</string>
     <string name="prompt_email">Email</string>
@@ -55,4 +55,11 @@
     <string name="profile_sharepositionyes">Oui, je veux partager ma position</string>
     <string name="profile_sharepositionno">Non, je ne veux pas partager ma position</string>
     <string name="profile_language">Langue de l\'application :</string>
+    <string name="pseudo">Pseudo</string>
+    <string name="password">Mot de passe</string>
+    <string name="password_check">Confirmation du mot de passe</string>
+    <string name="auth_failed">La connexion a échouée.</string>
+    <string name="sign_failed">L\'inscription a échouée.</string>
+    <string name="settings_saved">Les paramètres ont bien été enregistés !</string>
+    <string name="settings_cancelled">Les paramètres ont été annulés.</string>
 </resources>

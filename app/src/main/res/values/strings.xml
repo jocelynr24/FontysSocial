@@ -67,4 +67,8 @@
     <string name="profile_sharepositionyes">Yes, I want to share my position</string>
     <string name="profile_sharepositionno">No, I don\'t want to share my position</string>
     <string name="profile_language">Language of the app:</string>
+    <string name="auth_failed">Authentication failed.</string>
+    <string name="sign_failed">Sign up failed.</string>
+    <string name="settings_saved">Settings saved succesfully!</string>
+    <string name="settings_cancelled">Settings cancelled.</string>
 </resources>

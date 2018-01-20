@@ -187,7 +187,7 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
 
                         Map<String, Object> users = (Map<String, Object>) dataSnapshot.getValue();
 
-                        mMap.clear();
+                        //mMap.clear();
                         markers.clear();
 
                         for (Map.Entry<String, Object> entry : users.entrySet()) {
@@ -234,6 +234,7 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
                                     String name = (String) ((Map) singleEvent.get("info")).get("name");
                                     String description = (String) ((Map) singleEvent.get("info")).get("description");
                                     String address = (String) ((Map) singleEvent.get("info")).get("address");
+                                    String owner = (String) ((Map) singleEvent.get("info")).get("owner");
                                     double latitude = (double) ((Map) singleEvent.get("position")).get("latitude");
                                     double longitude = (double) ((Map) singleEvent.get("position")).get("longitude");
                                     String startDate = (String) ((Map) singleEvent.get("start")).get("date");
@@ -242,7 +243,7 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
                                     String endTime = (String) ((Map) singleEvent.get("end")).get("time");
 
                                     Marker marker = addEventMarker(latitude, longitude, name, description);
-                                    eventsInfos.put(marker, new String[]{name, address, startDate, startTime, endDate, endTime});
+                                    eventsInfos.put(marker, new String[]{ID, name, address, owner, startDate, startTime, endDate, endTime});
                                 }
                             }
                         }
@@ -264,15 +265,14 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
         if (type.equals("Event")) {
             AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
             alertDialog.setTitle(marker.getTitle());
-            alertDialog.setMessage(marker.getSnippet() + "\n\n" + getText(R.string.mapevent_address) + " " + eventsInfos.get(marker)[1] + "\n" + getText(R.string.mapevent_start) + " " + eventsInfos.get(marker)[2] + " " + getText(R.string.mapevent_at) + " " + eventsInfos.get(marker)[3] + "\n" + getText(R.string.mapevent_end) + " " + eventsInfos.get(marker)[4] + " " + getText(R.string.mapevent_at) + " " + eventsInfos.get(marker)[5]);
+            alertDialog.setMessage(marker.getSnippet() + "\n\n" + getText(R.string.mapevent_address) + " " + eventsInfos.get(marker)[2] + "\n" + getText(R.string.mapevent_start) + " " + eventsInfos.get(marker)[4] + " " + getText(R.string.mapevent_at) + " " + eventsInfos.get(marker)[5] + "\n" + getText(R.string.mapevent_end) + " " + eventsInfos.get(marker)[6] + " " + getText(R.string.mapevent_at) + " " + eventsInfos.get(marker)[7]);
             alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, getText(R.string.mapevent_close),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
                         }
                     });
-            // todo: the event can be only removed by the owner of the event
-            //if(/* The user is the owner of this event */){
+            if(User.getInstance().getName().equals(eventsInfos.get(marker)[3])){
             alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getText(R.string.mapevent_remove),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
@@ -280,8 +280,8 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
                             marker.remove();
                         }
                     });
+            }
             alertDialog.show();
-            //}
         }
     }
 
@@ -313,7 +313,6 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
                     .title(text)
                     .snippet("0"+decimalFormat.format(distance) + " km"));
         }
-        //mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(position, 15));
 
         return marker;
     }
@@ -322,7 +321,6 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
         Marker marker;
 
         marker = mMap.addMarker(new MarkerOptions().position(position).title(text));
-        //mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(position, 15));
 
         return marker;
     }
