@@ -405,21 +405,30 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
     }
 
     private final void createNotifications(){
-        String text=null;
+        StringBuilder text= new StringBuilder();
         for(String element:elementClosed){
-            text=element+" ";
+            text.append(" ").append(element);
         }
-        NotificationCompat.Builder builder =
-                new NotificationCompat.Builder(getActivity(),"fontys notification")
-                        .setSmallIcon(R.drawable.ic_logo_fontys)
-                        .setContentTitle("Some event or people are closed")   //this is the title of notification
-                        .setColor(101)
-                        .setContentText(text+" are closed. Check it!");   //this is the message showed in notification
-        //Vibration
+        NotificationCompat.Builder builder =null;
+        if(elementClosed.size()==1) {
+
+            builder=new NotificationCompat.Builder(getActivity(), "fontys notification")
+                            .setSmallIcon(R.drawable.ic_logo_fontys)
+                            .setContentTitle("Some event or people are closed")
+                            .setColor(101)
+                            .setContentText(text + " is closed. Check it!");
+        }else{
+         builder =
+                    new NotificationCompat.Builder(getActivity(), "fontys notification")
+                            .setSmallIcon(R.drawable.ic_logo_fontys)
+                            .setContentTitle("Some event or people are closed")
+                            .setColor(101)
+                            .setContentText(text + " are closed. Check it!");
+        }
         builder.setVibrate(new long[] { 1000, 1000, 1000, 1000, 1000 });
 
         //LED
-        builder.setLights(Color.RED, 3000, 3000);
+        builder.setLights(Color.RED, 1000, 1000);
         Intent intent = new Intent(getActivity(),NotificationsFragment.class);
         PendingIntent contentIntent = PendingIntent.getActivity(getActivity(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(contentIntent);
@@ -482,7 +491,7 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
 
         protected void onPostExecute(Double result){
             super.onPostExecute(result);
-            if(result<60) {
+            if(result<100) {
                 elementClosed.add(name);
                 createNotifications();
             }else{

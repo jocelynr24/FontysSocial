@@ -149,6 +149,5 @@ public class SignUpActivity extends AppCompatActivity {
             }
         }
         mail_account.setAdapter(new ArrayAdapter<>(context, android.R.layout.simple_dropdown_item_1line, new ArrayList<>(emailSet)));
-
     }
 }
