@@ -390,13 +390,13 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
                         .setSmallIcon(R.drawable.ic_logo_fontys)
                         .setContentTitle(getString(R.string.notif_close))
                         .setColor(101)
-                        .setContentText("An event or friend is closed. Check it!");
+                        .setContentText(getString(R.string.notif_one_obj));
             } else {
                 builder = new NotificationCompat.Builder(getActivity(), "fontys notification")
                         .setSmallIcon(R.drawable.ic_logo_fontys)
                         .setContentTitle(getString(R.string.notif_close))
                         .setColor(101)
-                        .setContentText("Some events or friends are closed. Check it!");
+                        .setContentText(getString(R.string.notif_sev_obj));
             }
             builder.setVibrate(new long[] { 1000, 1000, 1000, 1000, 1000 });
 

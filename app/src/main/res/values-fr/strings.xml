@@ -67,4 +67,6 @@
     <string name="mapevent_distance">"Distance par rapport à vous : "</string>
     <string name="event_incorrectfields">Champs incorrects</string>
     <string name="event_incorrectfieldsdesc">Les champs que vous avez renseignés sont inccorects !</string>
+    <string name="notif_one_obj">Un évènement ou un ami est proche de vous, allez voir!</string>
+    <string name="notif_sev_obj">Des évènement ou des ami sont proches de vous, allez voir!</string>
 </resources>
