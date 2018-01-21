@@ -1,4 +1,4 @@
-package routin.fontyssocial;
+package routin.fontyssocial.fragments;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -22,6 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.HashMap;
 import java.util.Map;
 
+import routin.fontyssocial.R;
 import routin.fontyssocial.model.User;
 
 

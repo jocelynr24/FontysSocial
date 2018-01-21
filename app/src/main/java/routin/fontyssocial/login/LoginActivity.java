@@ -10,7 +10,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -31,7 +30,6 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 import routin.fontyssocial.R;
-import routin.fontyssocial.SignUpActivity;
 import routin.fontyssocial.main.MainActivity;
 import routin.fontyssocial.model.User;
 

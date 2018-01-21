@@ -35,7 +35,6 @@ import routin.fontyssocial.model.Event;
 import routin.fontyssocial.model.User;
 
 public class AddEventFragment extends Fragment {
-    private View myView;
     private EditText text_name;
     private EditText text_desc;
     private EditText text_address;
@@ -50,13 +49,13 @@ public class AddEventFragment extends Fragment {
     private Calendar mStartTime = Calendar.getInstance();
     private Calendar mEndTime = Calendar.getInstance();
 
-    final FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference events = database.getReference("events");
+    private final FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private final DatabaseReference events = database.getReference("events");
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        myView = inflater.inflate(R.layout.fragment_add_event, container, false);
+        View myView = inflater.inflate(R.layout.fragment_add_event, container, false);
 
         text_name = (EditText) myView.findViewById(R.id.et_name);
         text_desc = (EditText) myView.findViewById(R.id.et_desc);
@@ -211,25 +210,31 @@ public class AddEventFragment extends Fragment {
         String endDate = text_endDate.getText().toString();
         String startTime = text_startTime.getText().toString();
         String endTime = text_endTime.getText().toString();
-        LatLng position = getLocationFromAddress(getContext(), address);
 
-        if(position != null){
-            SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMyyyyHHmmssSS");
-            Date currentDate = new Date();
-            String ID = dateFormat.format(currentDate);
-            new Event(ID);
+        if(!name.matches("") && !description.matches("") && !owner.matches("") && !address.matches("") &&
+                !startDate.matches("") && !endDate.matches("") && !startTime.matches("") && !endTime.matches("")){
+            LatLng position = getLocationFromAddress(getContext(), address);
+            if(position != null){
+                SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMyyyyHHmmssSS");
+                Date currentDate = new Date();
+                String ID = dateFormat.format(currentDate);
 
-            events.child(ID).child("info").child("name").setValue(name);
-            events.child(ID).child("info").child("description").setValue(description);
-            events.child(ID).child("info").child("owner").setValue(owner);
-            events.child(ID).child("position").setValue(position);
-            events.child(ID).child("info").child("address").setValue(address);
-            events.child(ID).child("start").child("date").setValue(startDate);
-            events.child(ID).child("start").child("time").setValue(startTime);
-            events.child(ID).child("end").child("date").setValue(endDate);
-            events.child(ID).child("end").child("time").setValue(endTime);
+                new Event(ID, name, description, address, owner, position, startDate, endDate, startTime, endTime);
+
+                events.child(ID).child("info").child("name").setValue(name);
+                events.child(ID).child("info").child("description").setValue(description);
+                events.child(ID).child("info").child("owner").setValue(owner);
+                events.child(ID).child("position").setValue(position);
+                events.child(ID).child("info").child("address").setValue(address);
+                events.child(ID).child("start").child("date").setValue(startDate);
+                events.child(ID).child("start").child("time").setValue(startTime);
+                events.child(ID).child("end").child("date").setValue(endDate);
+                events.child(ID).child("end").child("time").setValue(endTime);
+            } else {
+                this.alertDialog(getString(R.string.event_incorrectaddress), getString(R.string.event_incorrectaddressdesc), getString(R.string.event_ok));
+            }
         } else {
-            this.alertDialog(getString(R.string.event_incorrectaddress), getString(R.string.event_incorrectaddressdesc), getString(R.string.event_ok));
+            this.alertDialog(getString(R.string.event_incorrectfields), getString(R.string.event_incorrectfieldsdesc), getString(R.string.event_ok));
         }
     }
 
@@ -243,7 +248,7 @@ public class AddEventFragment extends Fragment {
             if (address == null) {
                 position = null;
             }
-            if (result != null){
+            if (result.size() > 0){
                 Address location = result.get(0);
                 location.getLatitude();
                 location.getLongitude();

@@ -49,13 +49,16 @@
     <string name="mapevent_end">End:</string>
     <string name="mapevent_close">Close</string>
     <string name="mapevent_remove">Remove</string>
+    <string name="mapevent_distance">Distance from you:</string>
+    <string name="event_incorrectfields">Incorrect fields</string>
+    <string name="event_incorrectfieldsdesc">The fields you typed are incorrect!</string>
 
     <!-- Strings related to permissions -->
     <string name="permission_locationerror">Location error</string>
     <string name="permission_locationerrordesc">Location authorization is required to work correctly. Please enable it to use this app.</string>
     <string name="permission_locationok">OK</string>
 
-    <!-- Strings related to profile settings -->
+    <!-- Strings related to profile and settings -->
     <string name="profile_en">English</string>
     <string name="profile_fr">French</string>
     <string name="profile_title">Profile settings</string>
@@ -67,8 +70,14 @@
     <string name="profile_sharepositionyes">Yes, I want to share my position</string>
     <string name="profile_sharepositionno">No, I don\'t want to share my position</string>
     <string name="profile_language">Language of the app:</string>
+    <string name="settings_saved">Settings saved successfully!</string>
+    <string name="settings_cancelled">Settings cancelled.</string>
+
+    <!-- Strings related to auth -->
     <string name="auth_failed">Authentication failed.</string>
     <string name="sign_failed">Sign up failed.</string>
-    <string name="settings_saved">Settings saved succesfully!</string>
-    <string name="settings_cancelled">Settings cancelled.</string>
+
+    <!-- Strings related to notifications -->
+    <string name="notif_close">Some people or events are close to you!</string>
+    <string name="notif_close_detail">Click here to open Fontys Social and discover!</string>
 </resources>

@@ -62,10 +62,8 @@ import routin.fontyssocial.modelGoogle.DistanceGoogleMatrix;
 import static android.content.Context.LOCATION_SERVICE;
 
 public class MapEventFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
-    private View myView;
     private GoogleMap mMap;
     private LocationManager mLocationManager;
-    private Marker mLocationMarker = null;
     private List<Marker> markers = new ArrayList<>();
     private Location mLocation = null;
 
@@ -79,18 +77,21 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
 
     private Map<String,Object> users = new HashMap<>();
     private HashMap<Marker, String[]> eventsInfos = new HashMap<Marker, String[]>();
-    private List<String> elementClosed=new ArrayList<>();
+    private List<String> elementClosed = new ArrayList<>();
 
     private final LocationListener mLocationListener = new LocationListener() {
         @Override
         public void onLocationChanged(final Location location) {
             mLocation = location;
 
-            ref.child(User.getInstance().getName()).child("latitude").setValue(location.getLatitude());
-            ref.child(User.getInstance().getName()).child("longitude").setValue(location.getLongitude());
+            if(location != null){
+                DatabaseReference ref = database.getReference("users");
+                ref.child(User.getInstance().getName()).child("latitude").setValue(location.getLatitude());
+                ref.child(User.getInstance().getName()).child("longitude").setValue(location.getLongitude());
+            }
 
-            mMap.clear();
-            markers.clear();
+            //mMap.clear();
+            //markers.clear();
 
             for (Map.Entry<String, Object> entry : users.entrySet()) {
 
@@ -100,7 +101,6 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
                     //Get user map
                     Map singleUser = (Map) entry.getValue();
                     //Get phone field and append to list
-
                     Long lat = (Long) singleUser.get("latitude");
                     double latitude = lat.doubleValue();
                     Long longi = (Long) singleUser.get("longitude");
@@ -111,7 +111,7 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
                     locations[2]=latitude+"";
                     locations[3]=longitude+"";
                     HttpGetRequest getRequest = new HttpGetRequest(latitude, longitude, name,"user",null,
-                            null,null,null,null,null);
+                            null,null,null,null,null, null, null);
                     getRequest.execute(locations);
                 }
             }
@@ -134,7 +134,7 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        myView = inflater.inflate(R.layout.fragment_map_event, container, false);
+        View myView = inflater.inflate(R.layout.fragment_map_event, container, false);
         auth = FirebaseAuth.getInstance();
         mLocationManager = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
 
@@ -155,7 +155,6 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
 
         MapFragment mapFragment = (MapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
 
         return myView;
     }
@@ -180,7 +179,7 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
 
                         Map<String, Object> users = (Map<String, Object>) dataSnapshot.getValue();
 
-                        //mMap.clear();
+                        mMap.clear();
                         markers.clear();
 
                         for (Map.Entry<String, Object> entry : users.entrySet()) {
@@ -200,7 +199,7 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
                                 locations[2] = latitude + "";
                                 locations[3] = longitude + "";
                                 HttpGetRequest getRequest = new HttpGetRequest(latitude, longitude, name,"user",null,
-                                        null,null,null,null,null);
+                                        null,null,null,null,null, null, null);
                                 getRequest.execute(locations);
                             }
                         }
@@ -236,17 +235,16 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
                                     String startTime = (String) ((Map) singleEvent.get("start")).get("time");
                                     String endDate = (String) ((Map) singleEvent.get("end")).get("date");
                                     String endTime = (String) ((Map) singleEvent.get("end")).get("time");
+
                                     String[] locations = new String[4];
                                     if(mLocation==null){
                                         mLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                                    }else{
-
                                     }
                                     locations[0] = mLocation.getLatitude() + "";
                                     locations[1] = mLocation.getLongitude() + "";
                                     locations[2] = latitude + "";
                                     locations[3] = longitude + "";
-                                    HttpGetRequest getRequest = new HttpGetRequest(latitude, longitude, name,"event", description,address,startDate,startTime,endDate,endTime);
+                                    HttpGetRequest getRequest = new HttpGetRequest(latitude, longitude, name,"event", description, address, startDate, startTime, endDate, endTime, ID, owner);
                                     getRequest.execute(locations);
 
                                 }
@@ -265,12 +263,12 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
     @Override
     public void onInfoWindowClick(final Marker marker) {
         final String type = marker.getTitle().split(":")[0];
-        final String name = eventsInfos.get(marker)[0];
 
         if (type.equals("Event")) {
+            final String name = eventsInfos.get(marker)[0];
             AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
             alertDialog.setTitle(marker.getTitle());
-            alertDialog.setMessage(marker.getSnippet() + "\n\n" + getText(R.string.mapevent_address) + " " + eventsInfos.get(marker)[2] + "\n" + getText(R.string.mapevent_start) + " " + eventsInfos.get(marker)[4] + " " + getText(R.string.mapevent_at) + " " + eventsInfos.get(marker)[5] + "\n" + getText(R.string.mapevent_end) + " " + eventsInfos.get(marker)[6] + " " + getText(R.string.mapevent_at) + " " + eventsInfos.get(marker)[7]);
+            alertDialog.setMessage(marker.getSnippet() + "\n\n" + getText(R.string.mapevent_address) + " " + eventsInfos.get(marker)[2] + "\n" + getText(R.string.mapevent_start) + " " + eventsInfos.get(marker)[4] + " " + getText(R.string.mapevent_at) + " " + eventsInfos.get(marker)[5] + "\n" + getText(R.string.mapevent_end) + " " + eventsInfos.get(marker)[6] + " " + getText(R.string.mapevent_at) + " " + eventsInfos.get(marker)[7] + "\n" + getText(R.string.mapevent_distance) + " " + eventsInfos.get(marker)[8]);
             alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, getText(R.string.mapevent_close),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
@@ -304,50 +302,29 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
     }
 
     public void addMarker(double latitude, double longitude, String name, String type, Double distance,
-                          String description, String address, String startDate, String startTime, String endDate, String endTime) {
+                          String description, String address, String startDate, String startTime, String endDate, String endTime,
+                          String ID, String owner) {
         LatLng position;
         Marker marker;
-        String text=null;
+        String distanceText = null;
         position = new LatLng(latitude, longitude);
         if (distance >= 1) {
-            text=decimalFormat.format(distance) + " km";
+            distanceText = decimalFormat.format(distance) + " km";
         } else {
-            text="0" + decimalFormat.format(distance) + " km";
+            distanceText = "0" + decimalFormat.format(distance) + " km";
         }
         if(type.equals("user")) {
 
             marker = mMap.addMarker(new MarkerOptions().position(position)
                     .title(name)
-                    .snippet(text));
-        }else{
+                    .snippet(distanceText));
+        } else {
             position = new LatLng(latitude, longitude);
-            marker = mMap.addMarker(new MarkerOptions().position(position).title("Event: " + name).snippet(description+"\n"+text)
+            marker = mMap.addMarker(new MarkerOptions().position(position).title("Event: " + name).snippet(description)
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
 
-            eventsInfos.put(marker, new String[]{name, address, startDate, startTime, endDate, endTime});
-        }
-
+            eventsInfos.put(marker, new String[]{ID, name, address, owner, startDate, startTime, endDate, endTime, distanceText});}
     }
-
-//    public Marker addMarker(LatLng position, String text) {
-//        Marker marker;
-//
-//        marker = mMap.addMarker(new MarkerOptions().position(position).title(text));
-//        //mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(position, 15));
-//
-//        return marker;
-//    }
-
-//    public Marker addEventMarker(double latitude, double longitude, String name, String description,String distance) {
-//        LatLng position;
-//        Marker marker;
-//
-//        position = new LatLng(latitude, longitude);
-//        marker = mMap.addMarker(new MarkerOptions().position(position).title("Event: " + name).snippet(description)
-//                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
-//
-//        return marker;
-//    }
 
     @SuppressLint("MissingPermission")
     public void zoomToPosition() {
@@ -359,11 +336,7 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
     }
 
     public boolean permissionsGranted() {
-        if (ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        } else {
-            return false;
-        }
+        return ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
     }
 
     private Location getLastKnownLocation(){
@@ -399,8 +372,13 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
         while ((line = bufferedReader.readLine()) != null) {
             chainResult.append(line);
         }
-        DistanceGoogleMatrix distanceGoogleMatrix =gson.fromJson(chainResult.toString(),DistanceGoogleMatrix.class);
-        return (Double) (double) distanceGoogleMatrix.getRows()[0].elements[0].getDistance().getValue();
+        DistanceGoogleMatrix distanceGoogleMatrix = gson.fromJson(chainResult.toString(),DistanceGoogleMatrix.class);
+
+        if(distanceGoogleMatrix.getRows()[0].elements[0].getDistance() != null){
+            return (Double) (double) distanceGoogleMatrix.getRows()[0].elements[0].getDistance().getValue();
+        } else {
+            return 0.0;
+        }
     }
 
     private final void createNotifications(){
@@ -408,53 +386,53 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
         for(String element:elementClosed){
             text.append(" ").append(element);
         }
-        NotificationCompat.Builder builder =null;
-        if(elementClosed.size()==1) {
+        NotificationCompat.Builder builder = null;
 
-            builder=new NotificationCompat.Builder(getActivity(), "fontys notification")
-                            .setSmallIcon(R.drawable.ic_logo_fontys)
-                            .setContentTitle("Some event or people are closed")
-                            .setColor(101)
-                            .setContentText(text + " is closed. Check it!");
-        }else{
-         builder =
-                    new NotificationCompat.Builder(getActivity(), "fontys notification")
-                            .setSmallIcon(R.drawable.ic_logo_fontys)
-                            .setContentTitle("Some event or people are closed")
-                            .setColor(101)
-                            .setContentText(text + " are closed. Check it!");
+        if(getActivity() != null){
+            if(elementClosed.size() == 1) {
+                builder = new NotificationCompat.Builder(getActivity(), "fontys notification")
+                        .setSmallIcon(R.drawable.ic_logo_fontys)
+                        .setContentTitle(getString(R.string.notif_close))
+                        .setColor(101)
+                        .setContentText(text + " is closed. Check it!");
+            } else {
+                builder = new NotificationCompat.Builder(getActivity(), "fontys notification")
+                        .setSmallIcon(R.drawable.ic_logo_fontys)
+                        .setContentTitle(getString(R.string.notif_close))
+                        .setColor(101)
+                        .setContentText(text + " are closed. Check it!");
+            }
+            builder.setVibrate(new long[] { 1000, 1000, 1000, 1000, 1000 });
+
+            //LED
+            builder.setLights(Color.RED, 1000, 1000);
+            Intent intent = new Intent(getActivity(),NotificationsFragment.class);
+            PendingIntent contentIntent = PendingIntent.getActivity(getActivity(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            builder.setContentIntent(contentIntent);
+            // Add as notification
+            NotificationManager manager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+            manager.notify(0, builder.build());
         }
-        builder.setVibrate(new long[] { 1000, 1000, 1000, 1000, 1000 });
-
-        //LED
-        builder.setLights(Color.RED, 1000, 1000);
-        Intent intent = new Intent(getActivity(),NotificationsFragment.class);
-        PendingIntent contentIntent = PendingIntent.getActivity(getActivity(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        builder.setContentIntent(contentIntent);
-        // Add as notification
-        NotificationManager manager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
-        manager.notify(0, builder.build());
-
 
     }
 
     public class HttpGetRequest extends AsyncTask<String, Void, Double> {
-
         private double latitude;
         private double longitude;
         private String name;
         private String type;
         private String description;
-        String address;
-        String startDate;
-        String startTime;
-        String endDate;
-        String endTime;
-
-
+        private String address;
+        private String startDate;
+        private String startTime;
+        private String endDate;
+        private String endTime;
+        private String ID;
+        private String owner;
 
         HttpGetRequest(double latitude, double longitude, String name, String type,
-                       String description, String address, String startDate, String startTime, String endDate, String endTime) {
+                       String description, String address, String startDate, String startTime, String endDate, String endTime,
+                       String ID, String owner) {
             this.latitude = latitude;
             this.longitude = longitude;
             this.name = name;
@@ -465,15 +443,16 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
             this.startTime = startTime;
             this.endDate = endDate;
             this.endTime = endTime;
+            this.ID = ID;
+            this.owner = owner;
         }
 
         @Override
         protected Double doInBackground(String... params) {
-
             try {
                 URL url = null;
                 URL url2 = null;
-                String apiKeyMapDistance = "AIzaSyDeKvB4UAJRjhhGgQg_G5EmcA7OHQQgRMM";
+                String apiKeyMapDistance = "AIzaSyAfcQhrPwICW1rmoh2SzVB9jp0SFcCplCg";
                 url = new URL("https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins="
                         + params[0] + "," + params[1] + "&destinations=" + params[2] + "," + params[3] + "&mode=driving&key=" + apiKeyMapDistance);
 
@@ -496,11 +475,9 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
             }else{
                 if (elementClosed.contains(name)) {
                     elementClosed.remove(name);
-                }else{}
+                }
             }
-
-            addMarker(latitude, longitude, name,type,result/1000, description,address,startDate,startTime,endDate,endTime);
+            addMarker(latitude, longitude, name, type,result/1000, description, address, startDate, startTime, endDate, endTime, ID, owner);
         }
     }
 }
-
