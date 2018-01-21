@@ -453,14 +453,11 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
         @Override
         protected Double doInBackground(String... params) {
             try {
-                URL url = null;
-                URL url2 = null;
                 String apiKeyMapDistance = "AIzaSyAfcQhrPwICW1rmoh2SzVB9jp0SFcCplCg";
-                url = new URL("https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins="
+                URL url = new URL("https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins="
                         + params[0] + "," + params[1] + "&destinations=" + params[2] + "," + params[3] + "&mode=driving&key=" + apiKeyMapDistance);
 
-                Double drivingResult = initDistanceGoogleMatrix(url);
-                url2 = new URL("https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins="
+                URL url2 = new URL("https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins="
                         + params[0] + "," + params[1] + "&destinations=" + params[2] + "," + params[3] + "&mode=walking&key=" + apiKeyMapDistance);
                 Double walkingResult = initDistanceGoogleMatrix(url2);
                 return walkingResult;
