@@ -276,13 +276,13 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
                         }
                     });
             if(User.getInstance().getName().equals(eventsInfos.get(marker)[3])){
-            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getText(R.string.mapevent_remove),
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            events.child(name).removeValue();
-                            marker.remove();
-                        }
-                    });
+                alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getText(R.string.mapevent_remove),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                events.child(name).removeValue();
+                                marker.remove();
+                            }
+                        });
             }
             alertDialog.show();
         }
@@ -382,10 +382,6 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
     }
 
     private final void createNotifications(){
-        StringBuilder text= new StringBuilder();
-        for(String element:elementClosed){
-            text.append(" ").append(element);
-        }
         NotificationCompat.Builder builder = null;
 
         if(getActivity() != null){
@@ -394,18 +390,16 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
                         .setSmallIcon(R.drawable.ic_logo_fontys)
                         .setContentTitle(getString(R.string.notif_close))
                         .setColor(101)
-                        .setContentText(text + " is closed. Check it!");
+                        .setContentText("An event or friend is closed. Check it!");
             } else {
                 builder = new NotificationCompat.Builder(getActivity(), "fontys notification")
                         .setSmallIcon(R.drawable.ic_logo_fontys)
                         .setContentTitle(getString(R.string.notif_close))
                         .setColor(101)
-                        .setContentText(text + " are closed. Check it!");
+                        .setContentText("Some events or friends are closed. Check it!");
             }
             builder.setVibrate(new long[] { 1000, 1000, 1000, 1000, 1000 });
 
-            //LED
-            builder.setLights(Color.RED, 1000, 1000);
             Intent intent = new Intent(getActivity(),NotificationsFragment.class);
             PendingIntent contentIntent = PendingIntent.getActivity(getActivity(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             builder.setContentIntent(contentIntent);
@@ -459,7 +453,7 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
                 Double drivingResult=initDistanceGoogleMatrix(url);
                 url2 = new URL("https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins="
                         + params[0] + "," + params[1] + "&destinations=" + params[2] + "," + params[3] + "&mode=walking&key=" + apiKeyMapDistance);
-               Double walkingResult=initDistanceGoogleMatrix(url2);
+                Double walkingResult=initDistanceGoogleMatrix(url2);
                 return walkingResult;
             } catch (IOException e) {
                 e.printStackTrace();
