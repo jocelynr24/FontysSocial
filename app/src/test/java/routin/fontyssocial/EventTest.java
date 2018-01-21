@@ -15,7 +15,7 @@ public class EventTest {
     @Before
     public void setup(){
         eventWithId = new Event("1234");
-        eventComplete = new Event("1234", "Party in Eindhoven", "Night party in Eindhoven for the end of the semester.", "Eindhoven",  new LatLng(50.0, 50.0), "19/01/18", "20/01/18", "22:00", "02:00");
+        eventComplete = new Event("1234", "Party in Eindhoven", "Night party in Eindhoven for the end of the semester.", "Eindhoven", "Jocelyn",  new LatLng(50.0, 50.0), "19/01/18", "20/01/18", "22:00", "02:00");
     }
 
     @Test
@@ -72,11 +72,11 @@ public class EventTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void invalidDateFormatShouldThrowAnException(){
-        new Event("1234", "Party in Eindhoven", "Night party in Eindhoven for the end of the semester.", "Eindhoven",  new LatLng(50.0, 50.0), "1234", "1234", "22:00", "02:00");
+        new Event("1234", "Party in Eindhoven", "Night party in Eindhoven for the end of the semester.", "Eindhoven", "Jocelyn",  new LatLng(50.0, 50.0), "1234", "1234", "22:00", "02:00");
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void invalidTimeFormatShouldThrowAnException(){
-        new Event("1234", "Party in Eindhoven", "Night party in Eindhoven for the end of the semester.", "Eindhoven",  new LatLng(50.0, 50.0), "19/01/18", "20/01/18", "1234", "1234");
+        new Event("1234", "Party in Eindhoven", "Night party in Eindhoven for the end of the semester.", "Eindhoven", "Jocelyn",  new LatLng(50.0, 50.0), "19/01/18", "20/01/18", "1234", "1234");
     }
 }

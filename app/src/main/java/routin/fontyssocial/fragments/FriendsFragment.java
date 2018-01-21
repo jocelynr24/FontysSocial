@@ -10,9 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.support.v7.widget.SearchView;
 
-import routin.fontyssocial.FriendsList;
 import routin.fontyssocial.R;
-import routin.fontyssocial.SearchFriendFragment;
 
 public class FriendsFragment extends Fragment {
     View myView;

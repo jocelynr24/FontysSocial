@@ -10,12 +10,11 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class Event {
     private static Event INSTANCE = null;
-    //final FirebaseDatabase database = FirebaseDatabase.getInstance();
-    //DatabaseReference ref = database.getReference("events");
     private String ID;
     private String name;
     private String description;
     private String address;
+    private String owner;
     private LatLng position;
     private String startDate;
     private String endDate;
@@ -27,10 +26,11 @@ public class Event {
         this.ID = ID;
     }
 
-    public Event(String ID, String name, String description, String address, LatLng position, String startDate, String endDate, String startTime, String endTime){
+    public Event(String ID, String name, String description, String address, String owner, LatLng position, String startDate, String endDate, String startTime, String endTime){
         this.ID = ID;
         this.name = name;
         this.description = description;
+        this.owner = owner;
         this.address = address;
         this.position = position;
 
@@ -68,6 +68,14 @@ public class Event {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 
     public String getAddress() {

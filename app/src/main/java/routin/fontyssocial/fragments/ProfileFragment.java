@@ -27,7 +27,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import routin.fontyssocial.R;
-import routin.fontyssocial.SignUpActivity;
 import routin.fontyssocial.main.MainActivity;
 import routin.fontyssocial.model.User;
 

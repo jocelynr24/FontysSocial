@@ -1,4 +1,4 @@
-package routin.fontyssocial;
+package routin.fontyssocial.login;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -18,7 +18,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -30,7 +29,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import routin.fontyssocial.login.LoginActivity;
+import routin.fontyssocial.R;
 import routin.fontyssocial.main.MainActivity;
 import routin.fontyssocial.model.User;
 
