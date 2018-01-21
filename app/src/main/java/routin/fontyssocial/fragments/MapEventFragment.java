@@ -280,7 +280,8 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
                             dialog.dismiss();
                         }
                     });
-            if (User.getInstance().getName().equals(eventsInfos.get(marker)[3])) {
+
+            if(User.getInstance().getName().equals(eventsInfos.get(marker)[3])){
                 alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, getText(R.string.mapevent_remove),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
@@ -387,11 +388,7 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
         }
     }
 
-    private final void createNotifications() {
-        StringBuilder text = new StringBuilder();
-        for (String element : elementClosed) {
-            text.append(" ").append(element);
-        }
+    private final void createNotifications(){
         NotificationCompat.Builder builder = null;
 
         if (getActivity() != null) {
@@ -400,13 +397,13 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
                         .setSmallIcon(R.drawable.ic_logo_fontys)
                         .setContentTitle(getString(R.string.notif_close))
                         .setColor(101)
-                        .setContentText(text + " is closed. Check it!");
+                        .setContentText(getString(R.string.notif_one_obj));
             } else {
                 builder = new NotificationCompat.Builder(getActivity(), "fontys notification")
                         .setSmallIcon(R.drawable.ic_logo_fontys)
                         .setContentTitle(getString(R.string.notif_close))
                         .setColor(101)
-                        .setContentText(text + " are closed. Check it!");
+                        .setContentText(getString(R.string.notif_sev_obj));
             }
             builder.setVibrate(new long[]{1000, 1000, 1000, 1000, 1000});
 
