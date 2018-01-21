@@ -79,7 +79,6 @@
 
     <!-- Strings related to notifications -->
     <string name="notif_close">Some people or events are close to you!</string>
-    <string name="notif_close_detail">Click here to open Fontys Social and discover!</string>
-    <string name="notif_one_obj">An event or friend is closed. Check it!</string>
-    <string name="notif_sev_obj">Some events or friends are closed. Check it!</string>
+    <string name="notif_one_obj">An event or friend is close. Check it!</string>
+    <string name="notif_sev_obj">Some events or friends are close. Check it!</string>
 </resources>
