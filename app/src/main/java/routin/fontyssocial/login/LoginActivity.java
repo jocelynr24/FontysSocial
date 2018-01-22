@@ -44,7 +44,6 @@ public class LoginActivity extends AppCompatActivity {
     EditText password;
     private static Context context;
     private static final String TAG = "EmailPassword";
-    // @SuppressLint("Registered")
     private FirebaseAuth auth;
     private static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
@@ -74,12 +73,11 @@ public class LoginActivity extends AppCompatActivity {
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
                                     // Sign in success, update UI with the signed-in user's information
-                                    //Log.d(TAG, "signInWithEmail:success");
                                     FirebaseUser user = auth.getCurrentUser();
                                     updateUI(user);
                                 } else {
                                     // If sign in fails, display a message to the user.
-                                    Toast.makeText(LoginActivity.this, getString(R.string.auth_failed),
+                                    Toast.makeText(LoginActivity.this, getString(R.string.login_failed),
                                             Toast.LENGTH_SHORT).show();
                                 }
                             }

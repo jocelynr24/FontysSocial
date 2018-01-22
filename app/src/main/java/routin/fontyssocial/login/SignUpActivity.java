@@ -47,8 +47,8 @@ public class SignUpActivity extends AppCompatActivity {
     private static Context context;
     Button done;
     private static final String TAG = "EmailPassword";
-    // @SuppressLint("Registered")
     private FirebaseAuth auth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +59,7 @@ public class SignUpActivity extends AppCompatActivity {
         passwordCheck = findViewById(R.id.passwordCheck);
         name = findViewById(R.id.pseudo);
         done = findViewById(R.id.done);
-        done.setEnabled(true);
+        done.setEnabled(false);
         auth = FirebaseAuth.getInstance();
         addAdapterToViews();
 
@@ -104,7 +104,7 @@ public class SignUpActivity extends AppCompatActivity {
                             updateUI(user);
                         } else {
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(SignUpActivity.this, getString(R.string.sign_failed),
+                            Toast.makeText(SignUpActivity.this, getString(R.string.signup_failed),
                                     Toast.LENGTH_SHORT).show();
                         }
 

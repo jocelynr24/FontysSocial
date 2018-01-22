@@ -58,8 +58,8 @@
     <string name="pseudo">Pseudo</string>
     <string name="password">Mot de passe</string>
     <string name="password_check">Confirmation du mot de passe</string>
-    <string name="auth_failed">La connexion a échouée.</string>
-    <string name="sign_failed">L\'inscription a échouée.</string>
+    <string name="login_failed">La connexion a échouée.</string>
+    <string name="signup_failed">L\'inscription a échouée.</string>
     <string name="settings_saved">Les paramètres ont bien été enregistés !</string>
     <string name="settings_cancelled">Les paramètres ont été annulés.</string>
     <string name="notif_close">Des personnes ou des événements sont proches de vous!</string>
