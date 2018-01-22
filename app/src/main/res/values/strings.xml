@@ -7,6 +7,7 @@
     <string name="action_friends">Friends</string>
     <string name="action_profile">Profile</string>
     <string name="action_logout">Log out</string>
+    <string name="action_logout_searching">Log out (…)</string>
     <string name="app_subtitle">Your personal event planner!</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

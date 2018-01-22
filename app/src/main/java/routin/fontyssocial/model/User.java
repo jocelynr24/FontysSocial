@@ -58,8 +58,8 @@ public class User {
         ref.child(username).child("mail").setValue(mail);
         ref.child(username).child("latitude").setValue(50.111111111111111);
         ref.child(username).child("longitude").setValue(50.222222222222222);
-        ref.child(username).child("settings").child("firstname").setValue(username);
-        ref.child(username).child("settings").child("lastname").setValue(username);
+        ref.child(username).child("settings").child("firstname").setValue("");
+        ref.child(username).child("settings").child("lastname").setValue("");
         ref.child(username).child("settings").child("share").setValue(false);
     }
 

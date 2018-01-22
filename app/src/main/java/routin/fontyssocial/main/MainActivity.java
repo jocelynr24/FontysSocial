@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,6 +13,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -23,6 +25,7 @@ import routin.fontyssocial.fragments.MapEventFragment;
 import routin.fontyssocial.fragments.NotificationsFragment;
 import routin.fontyssocial.fragments.ProfileFragment;
 import routin.fontyssocial.login.LoginActivity;
+import routin.fontyssocial.model.User;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     public MapEventFragment mapEventFragment;
@@ -63,6 +66,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             MenuItem item =  navigationView.getMenu().getItem(0);
             onNavigationItemSelected(item);
         }
+
+        // Handler used because the User instance is not available immediately
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // Add the username to the logout text
+                NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+                Menu navMenu = navigationView.getMenu();
+                MenuItem logoutItem = navMenu.findItem(R.id.nav_logout);
+                logoutItem.setTitle(getString(R.string.action_logout) + " (" + User.getInstance().getName() + ")");
+            }
+        }, 2000);
     }
 
     @Override
@@ -102,6 +117,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+
         return true;
     }
 

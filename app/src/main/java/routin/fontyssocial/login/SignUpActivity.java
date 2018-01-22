@@ -159,11 +159,9 @@ public class SignUpActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = auth.getCurrentUser();
                             updateUI(user);
                         } else {
-                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
                             Toast.makeText(SignUpActivity.this, getString(R.string.signup_failed),
                                     Toast.LENGTH_SHORT).show();
                         }
@@ -187,7 +185,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     private void updateUI(FirebaseUser user) {
         String pseudo = this.pseudo.getText().toString();
-        String mail = mail_account.getText().toString();
+        String mail = this.mail_account.getText().toString();
         User u = new User(pseudo, mail);
         Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
         startActivity(intent);
