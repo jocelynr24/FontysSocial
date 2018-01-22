@@ -25,6 +25,10 @@
     <string name="password_check">Password Validation</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email completions."</string>
     <string name="title_activity_login2">Sign in</string>
+    <string name="auth_failed">Authentication failed.</string>
+    <string name="sign_failed">Sign up failed.</string>
+    <string name="login_noaccount">If you don\'t have an account, please first sign up by clicking on the button!</string>
+    <string name="login_signup">Sign up</string>
 
     <!-- Strings related to events -->
     <string name="event_addevent">Add an event</string>
@@ -73,12 +77,11 @@
     <string name="settings_saved">Settings saved successfully!</string>
     <string name="settings_cancelled">Settings cancelled.</string>
 
-    <!-- Strings related to auth -->
-    <string name="auth_failed">Authentication failed.</string>
-    <string name="sign_failed">Sign up failed.</string>
-
     <!-- Strings related to notifications -->
     <string name="notif_close">Some people or events are close to you!</string>
     <string name="notif_one_obj">An event or someone is close. Check it!</string>
     <string name="notif_sev_obj">Some events or people are close. Check it!</string>
+    <string name="login_signin">Sign in</string>
+    <string name="login_email">Email</string>
+    <string name="login_password">Password</string>
 </resources>
