@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 MenuItem logoutItem = navMenu.findItem(R.id.nav_logout);
                 logoutItem.setTitle(getString(R.string.action_logout) + " (" + User.getInstance().getName() + ")");
             }
-        }, 2000);
+        }, 5000);
     }
 
     @Override
