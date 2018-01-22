@@ -10,6 +10,8 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -38,14 +40,15 @@ import routin.fontyssocial.model.User;
  */
 
 public class LoginActivity extends AppCompatActivity {
-
     private static final Pattern EMAIL_PATTERN = Patterns.EMAIL_ADDRESS;
-    AutoCompleteTextView mail_account;
-    EditText password;
-    private static Context context;
     private static final String TAG = "EmailPassword";
-    private FirebaseAuth auth;
     private static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+    private static Context context;
+    private AutoCompleteTextView mail_account;
+    private EditText password;
+    private Button signIn;
+    private FirebaseAuth auth;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +57,9 @@ public class LoginActivity extends AppCompatActivity {
         LoginActivity.context = getApplicationContext();
         mail_account = findViewById(R.id.email);
         password = findViewById(R.id.password);
+        signIn = findViewById(R.id.sign_in);
+        signIn.setEnabled(false);
+
         auth = FirebaseAuth.getInstance();
         addAdapterToViews();
 
@@ -62,7 +68,47 @@ public class LoginActivity extends AppCompatActivity {
             updateUI(user);
         }
 
-        Button signIn = findViewById(R.id.sign_in);
+        mail_account.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(mail_account.getText().toString().isEmpty() || password.getText().toString().isEmpty()){
+                    signIn.setEnabled(false);
+                }else{
+                    signIn.setEnabled(true);
+                }
+            }
+        });
+
+        password.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(mail_account.getText().toString().isEmpty() || password.getText().toString().isEmpty()){
+                    signIn.setEnabled(false);
+                }else{
+                    signIn.setEnabled(true);
+                }
+            }
+        });
 
         signIn.setOnClickListener(new View.OnClickListener() {
             @Override

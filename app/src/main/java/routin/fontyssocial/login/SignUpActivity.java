@@ -38,15 +38,12 @@ import routin.fontyssocial.model.User;
  */
 
 public class SignUpActivity extends AppCompatActivity {
-
     private static final Pattern EMAIL_PATTERN = Patterns.EMAIL_ADDRESS;
-    AutoCompleteTextView mail_account;
-    EditText password;
-    EditText name;
-    EditText passwordCheck;
-    private static Context context;
-    Button done;
     private static final String TAG = "EmailPassword";
+    private static Context context;
+    private AutoCompleteTextView mail_account;
+    private EditText password, pseudo, passwordCheck;
+    private Button register;
     private FirebaseAuth auth;
 
     @Override
@@ -57,9 +54,9 @@ public class SignUpActivity extends AppCompatActivity {
         mail_account = findViewById(R.id.email);
         password = findViewById(R.id.password);
         passwordCheck = findViewById(R.id.passwordCheck);
-        name = findViewById(R.id.pseudo);
-        done = findViewById(R.id.done);
-        done.setEnabled(false);
+        pseudo = findViewById(R.id.pseudo);
+        register = findViewById(R.id.done);
+        register.setEnabled(false);
         auth = FirebaseAuth.getInstance();
         addAdapterToViews();
 
@@ -67,6 +64,69 @@ public class SignUpActivity extends AppCompatActivity {
             FirebaseUser user = auth.getCurrentUser();
             updateUI(user);
         }
+
+        mail_account.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if(mail_account.getText().toString().isEmpty() || pseudo.getText().toString().isEmpty() || !password.getText().toString().equals(passwordCheck.getText().toString())){
+                    register.setEnabled(false);
+                }else{
+                    register.setEnabled(true);
+                }
+            }
+        });
+
+        pseudo.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if(mail_account.getText().toString().isEmpty() || pseudo.getText().toString().isEmpty() || !password.getText().toString().equals(passwordCheck.getText().toString())){
+                    register.setEnabled(false);
+                }else{
+                    register.setEnabled(true);
+                }
+            }
+        });
+
+        password.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if(mail_account.getText().toString().isEmpty() || pseudo.getText().toString().isEmpty() || !password.getText().toString().equals(passwordCheck.getText().toString())){
+                    register.setEnabled(false);
+                }else{
+                    register.setEnabled(true);
+                }
+            }
+        });
 
         passwordCheck.addTextChangedListener(new TextWatcher() {
             @Override
@@ -81,17 +141,17 @@ public class SignUpActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if(!password.getText().toString().equals(passwordCheck.getText().toString())){
-                    done.setEnabled(false);
+                if(mail_account.getText().toString().isEmpty() || pseudo.getText().toString().isEmpty() || !password.getText().toString().equals(passwordCheck.getText().toString())){
+                    register.setEnabled(false);
                 }else{
-                    done.setEnabled(true);
+                    register.setEnabled(true);
                 }
             }
         });
 
 
 
-        done.setOnClickListener(new View.OnClickListener() {
+        register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // if sign up failed, it will displayed an message
@@ -126,7 +186,7 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void updateUI(FirebaseUser user) {
-        String pseudo = name.getText().toString();
+        String pseudo = this.pseudo.getText().toString();
         String mail = mail_account.getText().toString();
         User u = new User(pseudo, mail);
         Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
