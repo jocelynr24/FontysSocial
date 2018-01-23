@@ -78,7 +78,7 @@ public class SignUpActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if(mail_account.getText().toString().isEmpty() || pseudo.getText().toString().isEmpty() || !password.getText().toString().equals(passwordCheck.getText().toString())){
+                if(mail_account.getText().toString().isEmpty() || pseudo.getText().toString().isEmpty() || password.getText().toString().isEmpty() || passwordCheck.getText().toString().isEmpty() || !password.getText().toString().equals(passwordCheck.getText().toString())){
                     register.setEnabled(false);
                 }else{
                     register.setEnabled(true);
@@ -99,7 +99,7 @@ public class SignUpActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if(mail_account.getText().toString().isEmpty() || pseudo.getText().toString().isEmpty() || !password.getText().toString().equals(passwordCheck.getText().toString())){
+                if(mail_account.getText().toString().isEmpty() || pseudo.getText().toString().isEmpty() || password.getText().toString().isEmpty() || passwordCheck.getText().toString().isEmpty() || !password.getText().toString().equals(passwordCheck.getText().toString())){
                     register.setEnabled(false);
                 }else{
                     register.setEnabled(true);
@@ -120,7 +120,7 @@ public class SignUpActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if(mail_account.getText().toString().isEmpty() || pseudo.getText().toString().isEmpty() || !password.getText().toString().equals(passwordCheck.getText().toString())){
+                if(mail_account.getText().toString().isEmpty() || pseudo.getText().toString().isEmpty() || password.getText().toString().isEmpty() || passwordCheck.getText().toString().isEmpty() || !password.getText().toString().equals(passwordCheck.getText().toString())){
                     register.setEnabled(false);
                 }else{
                     register.setEnabled(true);
@@ -141,16 +141,14 @@ public class SignUpActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if(mail_account.getText().toString().isEmpty() || pseudo.getText().toString().isEmpty() || !password.getText().toString().equals(passwordCheck.getText().toString())){
+                if(mail_account.getText().toString().isEmpty() || pseudo.getText().toString().isEmpty() || password.getText().toString().isEmpty() || passwordCheck.getText().toString().isEmpty() || !password.getText().toString().equals(passwordCheck.getText().toString())){
                     register.setEnabled(false);
                 }else{
                     register.setEnabled(true);
                 }
             }
         });
-
-
-
+        
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
