@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,22 +13,24 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import com.google.firebase.auth.FirebaseAuth;
 
 import routin.fontyssocial.R;
-import routin.fontyssocial.fragments.AddEventFragment;
-import routin.fontyssocial.fragments.FriendsFragment;
-import routin.fontyssocial.fragments.MapEventFragment;
-import routin.fontyssocial.fragments.NotificationsFragment;
-import routin.fontyssocial.fragments.ProfileFragment;
+import routin.fontyssocial.fragments.event.AddEventFragment;
+import routin.fontyssocial.fragments.friends.FriendsFragment;
+import routin.fontyssocial.fragments.event.MapEventFragment;
+import routin.fontyssocial.fragments.agenda.AgendaFragment;
+import routin.fontyssocial.fragments.profile.ProfileFragment;
 import routin.fontyssocial.login.LoginActivity;
+import routin.fontyssocial.model.User;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     public MapEventFragment mapEventFragment;
     public AddEventFragment addEventFragment;
-    public NotificationsFragment notificationsFragment;
+    public AgendaFragment agendaFragment;
     public FriendsFragment friendsFragment;
     public ProfileFragment profileFragment;
 
@@ -55,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // We create all the fragments
             mapEventFragment = new MapEventFragment();
             addEventFragment = new AddEventFragment();
-            notificationsFragment = new NotificationsFragment();
+            agendaFragment = new AgendaFragment();
             friendsFragment = new FriendsFragment();
             profileFragment = new ProfileFragment();
 
@@ -63,6 +66,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             MenuItem item =  navigationView.getMenu().getItem(0);
             onNavigationItemSelected(item);
         }
+
+        // Handler used because the User instance is not available immediately
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // Add the username to the logout text
+                NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+                Menu navMenu = navigationView.getMenu();
+                MenuItem logoutItem = navMenu.findItem(R.id.nav_logout);
+                logoutItem.setTitle(getString(R.string.action_logout) + " (" + User.getInstance().getName() + ")");
+            }
+        }, 5000);
     }
 
     @Override
@@ -82,8 +97,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_map:
                 getFragmentManager().beginTransaction().replace(R.id.content_frame, mapEventFragment).commit();
                 break;
-            case R.id.nav_notifications:
-                getFragmentManager().beginTransaction().replace(R.id.content_frame, notificationsFragment).commit();
+            case R.id.nav_agenda:
+                getFragmentManager().beginTransaction().replace(R.id.content_frame, agendaFragment).commit();
                 break;
             case R.id.nav_friends:
                 getFragmentManager().beginTransaction().replace(R.id.content_frame, friendsFragment).commit();
@@ -102,6 +117,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+
         return true;
     }
 

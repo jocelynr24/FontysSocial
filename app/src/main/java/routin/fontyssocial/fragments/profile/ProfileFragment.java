@@ -1,4 +1,4 @@
-package routin.fontyssocial.fragments;
+package routin.fontyssocial.fragments.profile;
 
 import android.content.Intent;
 import android.content.res.Configuration;
