@@ -1,4 +1,4 @@
-package routin.fontyssocial.fragments;
+package routin.fontyssocial.fragments.event;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;

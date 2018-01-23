@@ -10,9 +10,9 @@
             android:icon="@drawable/ic_menu_map"
             android:title="@string/action_map" />
         <item
-            android:id="@+id/nav_notifications"
-            android:icon="@drawable/ic_menu_notifications"
-            android:title="@string/action_notifications" />
+            android:id="@+id/nav_agenda"
+            android:icon="@drawable/ic_menu_agenda"
+            android:title="@string/action_agenda" />
         <item
             android:id="@+id/nav_friends"
             android:icon="@drawable/ic_menu_friends"

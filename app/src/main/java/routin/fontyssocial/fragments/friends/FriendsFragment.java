@@ -1,4 +1,4 @@
-package routin.fontyssocial.fragments;
+package routin.fontyssocial.fragments.friends;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;

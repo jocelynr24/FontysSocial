@@ -1,4 +1,4 @@
-package routin.fontyssocial.fragments;
+package routin.fontyssocial.fragments.friends;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;

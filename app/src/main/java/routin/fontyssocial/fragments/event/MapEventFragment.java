@@ -1,4 +1,4 @@
-package routin.fontyssocial.fragments;
+package routin.fontyssocial.fragments.event;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -21,7 +21,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
-import android.util.ArrayMap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,6 +54,7 @@ import java.util.List;
 import java.util.Map;
 
 import routin.fontyssocial.R;
+import routin.fontyssocial.fragments.agenda.AgendaFragment;
 import routin.fontyssocial.main.MainActivity;
 import routin.fontyssocial.model.Event;
 import routin.fontyssocial.model.User;
@@ -409,7 +409,7 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
 
             //LED
             builder.setLights(Color.RED, 1000, 1000);
-            Intent intent = new Intent(getActivity(), NotificationsFragment.class);
+            Intent intent = new Intent(getActivity(), AgendaFragment.class);
             PendingIntent contentIntent = PendingIntent.getActivity(getActivity(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             builder.setContentIntent(contentIntent);
             // Add as notification

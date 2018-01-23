@@ -19,18 +19,18 @@ import android.view.MenuItem;
 import com.google.firebase.auth.FirebaseAuth;
 
 import routin.fontyssocial.R;
-import routin.fontyssocial.fragments.AddEventFragment;
-import routin.fontyssocial.fragments.FriendsFragment;
-import routin.fontyssocial.fragments.MapEventFragment;
-import routin.fontyssocial.fragments.NotificationsFragment;
-import routin.fontyssocial.fragments.ProfileFragment;
+import routin.fontyssocial.fragments.event.AddEventFragment;
+import routin.fontyssocial.fragments.friends.FriendsFragment;
+import routin.fontyssocial.fragments.event.MapEventFragment;
+import routin.fontyssocial.fragments.agenda.AgendaFragment;
+import routin.fontyssocial.fragments.profile.ProfileFragment;
 import routin.fontyssocial.login.LoginActivity;
 import routin.fontyssocial.model.User;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     public MapEventFragment mapEventFragment;
     public AddEventFragment addEventFragment;
-    public NotificationsFragment notificationsFragment;
+    public AgendaFragment agendaFragment;
     public FriendsFragment friendsFragment;
     public ProfileFragment profileFragment;
 
@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // We create all the fragments
             mapEventFragment = new MapEventFragment();
             addEventFragment = new AddEventFragment();
-            notificationsFragment = new NotificationsFragment();
+            agendaFragment = new AgendaFragment();
             friendsFragment = new FriendsFragment();
             profileFragment = new ProfileFragment();
 
@@ -97,8 +97,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_map:
                 getFragmentManager().beginTransaction().replace(R.id.content_frame, mapEventFragment).commit();
                 break;
-            case R.id.nav_notifications:
-                getFragmentManager().beginTransaction().replace(R.id.content_frame, notificationsFragment).commit();
+            case R.id.nav_agenda:
+                getFragmentManager().beginTransaction().replace(R.id.content_frame, agendaFragment).commit();
                 break;
             case R.id.nav_friends:
                 getFragmentManager().beginTransaction().replace(R.id.content_frame, friendsFragment).commit();
