@@ -65,8 +65,9 @@ import static android.content.Context.LOCATION_SERVICE;
 public class MapEventFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
     private GoogleMap mMap;
     private LocationManager mLocationManager;
-    private List<Marker> markers = new ArrayList<>();
     private Location mLocation = null;
+    private HashMap<String, Marker> markers = new HashMap<>();
+    private boolean firstpassage = true;
 
     private FirebaseAuth auth;
     private final FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -91,10 +92,7 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
                 ref.child(User.getInstance().getName()).child("longitude").setValue(location.getLongitude());
             }
 
-            //mMap.clear();
-            //markers.clear();
-
-            for (Map.Entry<String, Object> entry : users.entrySet()) {
+            /*for (Map.Entry<String, Object> entry : users.entrySet()) {
 
                 String name = entry.toString().split("=")[0];
 
@@ -115,7 +113,7 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
                             null, null, null, null, null, null, null);
                     getRequest.execute(locations);
                 }
-            }
+            }*/
         }
 
         @Override
@@ -180,30 +178,37 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
 
                         Map<String, Object> users = (Map<String, Object>) dataSnapshot.getValue();
 
-                        mMap.clear();
-                        markers.clear();
-
                         for (Map.Entry<String, Object> entry : users.entrySet()) {
 
                             String name = entry.toString().split("=")[0];
 
                             if (!name.equals(User.getInstance().getName())) {
+                                if (!firstpassage) {
+                                    Marker marker = markers.get(name);
+                                    if (marker != null) {
+                                        marker.remove();
+                                    }
+                                }
+
                                 //Get user map
                                 Map singleUser = (Map) entry.getValue();
                                 //Get phone field and append to list
 
-                                double latitude = (double) singleUser.get("latitude");
-                                double longitude = (double) singleUser.get("longitude");
-                                String[] locations = new String[4];
-                                locations[0] = mLocation.getLatitude() + "";
-                                locations[1] = mLocation.getLongitude() + "";
-                                locations[2] = latitude + "";
-                                locations[3] = longitude + "";
-                                HttpGetRequest getRequest = new HttpGetRequest(latitude, longitude, name, "user", null,
-                                        null, null, null, null, null, null, null);
-                                getRequest.execute(locations);
+                                if (singleUser.get("settings").toString().contains("true")) {
+                                    double latitude = (double) singleUser.get("latitude");
+                                    double longitude = (double) singleUser.get("longitude");
+                                    String[] locations = new String[4];
+                                    locations[0] = mLocation.getLatitude() + "";
+                                    locations[1] = mLocation.getLongitude() + "";
+                                    locations[2] = latitude + "";
+                                    locations[3] = longitude + "";
+                                    HttpGetRequest getRequest = new HttpGetRequest(latitude, longitude, name, "user", null,
+                                            null, null, null, null, null, null, null);
+                                    getRequest.execute(locations);
+                                }
                             }
                         }
+                        firstpassage = false;
                     }
 
                     @Override
@@ -319,11 +324,11 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
         } else {
             distanceText = "0" + decimalFormat.format(distance) + " km";
         }
-        if (type.equals("user")) {
-
+        if(type.equals("user")) {
             marker = mMap.addMarker(new MarkerOptions().position(position)
                     .title(name)
                     .snippet(distanceText));
+            markers.put(name, marker);
         } else {
             position = new LatLng(latitude, longitude);
             marker = mMap.addMarker(new MarkerOptions().position(position).title("Event: " + name).snippet(description)
@@ -453,11 +458,13 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
         @Override
         protected Double doInBackground(String... params) {
             try {
-                String apiKeyMapDistance = "AIzaSyAfcQhrPwICW1rmoh2SzVB9jp0SFcCplCg";
-                URL url = new URL("https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins="
+                URL url = null;
+                URL url2 = null;
+                String apiKeyMapDistance = "AIzaSyBnTtrn-E0kKiWVJBpAFna1sC9L6Xy9b6A";
+                url = new URL("https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins="
                         + params[0] + "," + params[1] + "&destinations=" + params[2] + "," + params[3] + "&mode=driving&key=" + apiKeyMapDistance);
 
-                URL url2 = new URL("https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins="
+                url2 = new URL("https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins="
                         + params[0] + "," + params[1] + "&destinations=" + params[2] + "," + params[3] + "&mode=walking&key=" + apiKeyMapDistance);
                 Double walkingResult = initDistanceGoogleMatrix(url2);
                 return walkingResult;
