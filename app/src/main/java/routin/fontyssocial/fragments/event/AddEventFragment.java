@@ -1,4 +1,4 @@
-package routin.fontyssocial.fragments;
+package routin.fontyssocial.fragments.event;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -23,6 +23,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -211,13 +212,31 @@ public class AddEventFragment extends Fragment {
         String startTime = text_startTime.getText().toString();
         String endTime = text_endTime.getText().toString();
 
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yy");
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+
+        Date startDateValue = new Date();
+        Date startTimeValue = new Date();
+        Date endDateValue = new Date();
+        Date endTimeValue = new Date();;
+
+        try {
+            startDateValue = dateFormat.parse(startDate);
+            startTimeValue = timeFormat.parse(startTime);
+            endDateValue = dateFormat.parse(endDate);
+            endTimeValue = timeFormat.parse(endTime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         if(!name.matches("") && !description.matches("") && !owner.matches("") && !address.matches("") &&
-                !startDate.matches("") && !endDate.matches("") && !startTime.matches("") && !endTime.matches("")){
+                !startDate.matches("") && !endDate.matches("") && !startTime.matches("") && !endTime.matches("") &&
+                !startDateValue.after(endDateValue) && (startDateValue.equals(endDateValue) && !startTimeValue.after(endTimeValue))){
             LatLng position = getLocationFromAddress(getContext(), address);
             if(position != null){
-                SimpleDateFormat dateFormat = new SimpleDateFormat("ddMMyyyyHHmmssSS");
+                SimpleDateFormat idFormat = new SimpleDateFormat("ddMMyyyyHHmmssSS");
                 Date currentDate = new Date();
-                String ID = dateFormat.format(currentDate);
+                String ID = idFormat.format(currentDate);
 
                 new Event(ID, name, description, address, owner, position, startDate, endDate, startTime, endTime);
 

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="routin.fontyssocial.fragments.AddEventFragment">
+    tools:context="routin.fontyssocial.fragments.event.AddEventFragment">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
@@ -92,7 +92,7 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_address" />
 
         <TextView
-            android:id="@+id/tv_startdate"
+            android:id="@+id/tv_start"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -110,7 +110,7 @@
             android:hint="@string/event_startdateinput"
             android:inputType="date"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_startdate" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_start" />
 
         <EditText
             android:id="@+id/et_starttime"
@@ -123,7 +123,7 @@
             android:inputType="time"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/et_startdate"
-            app:layout_constraintTop_toBottomOf="@+id/tv_startdate" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_start" />
 
         <TextView
             android:id="@+id/tv_enddate"

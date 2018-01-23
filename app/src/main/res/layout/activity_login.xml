@@ -1,4 +1,5 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -20,10 +21,21 @@
         android:layout_marginBottom="8dp"
         android:visibility="gone" />
 
+    <ImageView
+        android:id="@+id/iv_logo"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_alignStart="@+id/sign_in"
+        android:layout_below="@+id/sign_up"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="10dp"
+        app:srcCompat="@drawable/ic_logo_fontys_purple" />
+
     <ScrollView
         android:id="@+id/login_form"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginTop="30dp">
 
         <LinearLayout
             android:id="@+id/email_login_form"
@@ -39,7 +51,7 @@
                     android:id="@+id/email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/prompt_email"
+                    android:hint="@string/login_email"
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
                     android:popupBackground="#000000"
@@ -55,7 +67,7 @@
                     android:id="@+id/password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Password"
+                    android:hint="@string/login_password"
                     android:imeActionId="6"
                     android:imeActionLabel="@string/action_sign_in_short"
                     android:imeOptions="actionUnspecified"
@@ -64,14 +76,11 @@
                     android:singleLine="true" />
 
 
-
             </android.support.design.widget.TextInputLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="327dp">
-
-
+                android:layout_height="200dp">
 
 
                 <Button
@@ -79,29 +88,32 @@
                     style="?android:textAppearanceSmall"
                     android:layout_width="300dp"
                     android:layout_height="50dp"
-                    android:layout_marginStart="36dp"
-                    android:layout_marginTop="41dp"
-                    android:text="Sign in"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginTop="40dp"
+                    android:text="@string/login_signin"
                     android:textStyle="bold" />
 
                 <Button
                     android:id="@+id/sign_up"
                     style="?android:textAppearanceSmall"
                     android:layout_width="100dp"
-                    android:layout_height="45dp"
+                    android:layout_height="36dp"
                     android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:text="Sign up"
+                    android:layout_below="@+id/sign_in"
+                    android:layout_marginTop="35dp"
+                    android:text="@string/login_signup"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/textView2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
+                    android:layout_alignBottom="@+id/sign_up"
+                    android:layout_alignParentStart="true"
                     android:layout_toStartOf="@+id/sign_up"
-                    android:text="If you havn't an account click on sign up button: "
+                    android:text="@string/login_noaccount"
                     android:textStyle="bold" />
+
             </RelativeLayout>
         </LinearLayout>
 
