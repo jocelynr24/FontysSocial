@@ -8,7 +8,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.Map;
 
-import routin.fontyssocial.fragments.FriendsList;
+import routin.fontyssocial.fragments.friends.FriendsList;
 
 public class User {
     private static User INSTANCE = null;
