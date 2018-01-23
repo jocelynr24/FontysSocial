@@ -64,8 +64,9 @@ import static android.content.Context.LOCATION_SERVICE;
 public class MapEventFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
     private GoogleMap mMap;
     private LocationManager mLocationManager;
-    private List<Marker> markers = new ArrayList<>();
     private Location mLocation = null;
+    private HashMap<String, Marker> markers = new HashMap<>();
+    private boolean firstpassage = true;
 
     private FirebaseAuth auth;
     private final FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -90,10 +91,7 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
                 ref.child(User.getInstance().getName()).child("longitude").setValue(location.getLongitude());
             }
 
-            //mMap.clear();
-            //markers.clear();
-
-            for (Map.Entry<String, Object> entry : users.entrySet()) {
+            /*for (Map.Entry<String, Object> entry : users.entrySet()) {
 
                 String name = entry.toString().split("=")[0];
 
@@ -114,7 +112,7 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
                             null,null,null,null,null, null, null);
                     getRequest.execute(locations);
                 }
-            }
+            }*/
         }
 
         @Override
@@ -179,14 +177,16 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
 
                         Map<String, Object> users = (Map<String, Object>) dataSnapshot.getValue();
 
-                        mMap.clear();
-                        markers.clear();
-
                         for (Map.Entry<String, Object> entry : users.entrySet()) {
 
                             String name = entry.toString().split("=")[0];
 
                             if (!name.equals(User.getInstance().getName())) {
+                                if (!firstpassage) {
+                                    Marker marker = markers.get(name);
+                                    marker.remove();
+                                }
+
                                 //Get user map
                                 Map singleUser = (Map) entry.getValue();
                                 //Get phone field and append to list
@@ -203,6 +203,7 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
                                 getRequest.execute(locations);
                             }
                         }
+                        firstpassage = false;
                     }
 
                     @Override
@@ -314,10 +315,10 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
             distanceText = "0" + decimalFormat.format(distance) + " km";
         }
         if(type.equals("user")) {
-
             marker = mMap.addMarker(new MarkerOptions().position(position)
                     .title(name)
                     .snippet(distanceText));
+            markers.put(name, marker);
         } else {
             position = new LatLng(latitude, longitude);
             marker = mMap.addMarker(new MarkerOptions().position(position).title("Event: " + name).snippet(description)
