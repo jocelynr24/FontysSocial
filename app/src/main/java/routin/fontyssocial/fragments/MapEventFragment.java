@@ -21,6 +21,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -184,23 +185,27 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
                             if (!name.equals(User.getInstance().getName())) {
                                 if (!firstpassage) {
                                     Marker marker = markers.get(name);
-                                    marker.remove();
+                                    if (marker != null) {
+                                        marker.remove();
+                                    }
                                 }
 
                                 //Get user map
                                 Map singleUser = (Map) entry.getValue();
                                 //Get phone field and append to list
 
-                                double latitude = (double) singleUser.get("latitude");
-                                double longitude = (double) singleUser.get("longitude");
-                                String[] locations = new String[4];
-                                locations[0] = mLocation.getLatitude() + "";
-                                locations[1] = mLocation.getLongitude() + "";
-                                locations[2] = latitude + "";
-                                locations[3] = longitude + "";
-                                HttpGetRequest getRequest = new HttpGetRequest(latitude, longitude, name,"user",null,
-                                        null,null,null,null,null, null, null);
-                                getRequest.execute(locations);
+                                if (singleUser.get("settings").toString().contains("true")) {
+                                    double latitude = (double) singleUser.get("latitude");
+                                    double longitude = (double) singleUser.get("longitude");
+                                    String[] locations = new String[4];
+                                    locations[0] = mLocation.getLatitude() + "";
+                                    locations[1] = mLocation.getLongitude() + "";
+                                    locations[2] = latitude + "";
+                                    locations[3] = longitude + "";
+                                    HttpGetRequest getRequest = new HttpGetRequest(latitude, longitude, name, "user", null,
+                                            null, null, null, null, null, null, null);
+                                    getRequest.execute(locations);
+                                }
                             }
                         }
                         firstpassage = false;
@@ -453,7 +458,7 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
             try {
                 URL url = null;
                 URL url2 = null;
-                String apiKeyMapDistance = "AIzaSyAfcQhrPwICW1rmoh2SzVB9jp0SFcCplCg";
+                String apiKeyMapDistance = "AIzaSyBnTtrn-E0kKiWVJBpAFna1sC9L6Xy9b6A";
                 url = new URL("https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins="
                         + params[0] + "," + params[1] + "&destinations=" + params[2] + "," + params[3] + "&mode=driving&key=" + apiKeyMapDistance);
 

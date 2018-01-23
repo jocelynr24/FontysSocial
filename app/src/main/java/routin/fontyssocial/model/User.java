@@ -8,9 +8,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.Map;
 
-/**
- * Created by conte on 04/12/2017.
- */
+import routin.fontyssocial.fragments.FriendsList;
 
 public class User {
     private static User INSTANCE = null;
@@ -37,8 +35,9 @@ public class User {
                                 Map singleUser = (Map) entry.getValue();
 
                                 if (singleUser.get("mail").equals(mail)){
-
                                     User.this.name = entry.toString().split("=")[0];
+
+                                    FriendsList.initializeFriendList(User.this.name);
                                 }
                             }
                         }
@@ -61,6 +60,8 @@ public class User {
         ref.child(username).child("settings").child("firstname").setValue(username);
         ref.child(username).child("settings").child("lastname").setValue(username);
         ref.child(username).child("settings").child("share").setValue(false);
+
+        FriendsList.initializeFriendList(this.name);
     }
 
     public String getName() {
