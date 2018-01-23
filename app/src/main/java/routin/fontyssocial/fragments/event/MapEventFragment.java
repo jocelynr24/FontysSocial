@@ -91,29 +91,6 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
                 ref.child(User.getInstance().getName()).child("latitude").setValue(location.getLatitude());
                 ref.child(User.getInstance().getName()).child("longitude").setValue(location.getLongitude());
             }
-
-            /*for (Map.Entry<String, Object> entry : users.entrySet()) {
-
-                String name = entry.toString().split("=")[0];
-
-                if (!name.equals(User.getInstance().getName())) {
-                    //Get user map
-                    Map singleUser = (Map) entry.getValue();
-                    //Get phone field and append to list
-                    Long lat = (Long) singleUser.get("latitude");
-                    double latitude = lat.doubleValue();
-                    Long longi = (Long) singleUser.get("longitude");
-                    double longitude = longi.doubleValue();
-                    String[] locations = new String[4];
-                    locations[0] = mLocation.getLatitude() + "";
-                    locations[1] = mLocation.getLongitude() + "";
-                    locations[2] = latitude + "";
-                    locations[3] = longitude + "";
-                    HttpGetRequest getRequest = new HttpGetRequest(latitude, longitude, name, "user", null,
-                            null, null, null, null, null, null, null);
-                    getRequest.execute(locations);
-                }
-            }*/
         }
 
         @Override
