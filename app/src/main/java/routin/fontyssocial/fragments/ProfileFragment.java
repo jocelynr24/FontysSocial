@@ -99,8 +99,9 @@ public class ProfileFragment extends Fragment {
         fab_close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MainActivity ma = ((MainActivity) getActivity());
-                ma.getFragmentManager().beginTransaction().replace(R.id.content_frame, ma.mapEventFragment).commit();
+                Intent i = myView.getContext().getPackageManager().getLaunchIntentForPackage( myView.getContext().getPackageName() );
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(i);
 
                 Toast.makeText(getContext(), getString(R.string.settings_cancelled), Toast.LENGTH_SHORT).show();
             }

@@ -63,8 +63,9 @@
     <string name="settings_saved">Les paramètres ont bien été enregistés !</string>
     <string name="settings_cancelled">Les paramètres ont été annulés.</string>
     <string name="notif_close">Des personnes ou des événements sont proches de vous!</string>
-    <string name="notif_close_detail">Cliquez ici pour ouvrir Fontys Social et découvrir !</string>
     <string name="mapevent_distance">"Distance par rapport à vous : "</string>
     <string name="event_incorrectfields">Champs incorrects</string>
     <string name="event_incorrectfieldsdesc">Les champs que vous avez renseignés sont inccorects !</string>
+    <string name="notif_one_obj">Un évènement ou un ami est proche de vous, allez voir !</string>
+    <string name="notif_sev_obj">Des évènements ou des amis sont proches de vous, allez voir !</string>
 </resources>
