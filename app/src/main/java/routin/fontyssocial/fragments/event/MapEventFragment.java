@@ -115,7 +115,7 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
         mLocationManager = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
 
         if (permissionsGranted()) {
-            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 50, mLocationListener);
+            mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 10, mLocationListener);
         }
 
         mLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
@@ -296,10 +296,14 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
         Marker marker;
         String distanceText = null;
         position = new LatLng(latitude, longitude);
-        if (distance >= 1) {
-            distanceText = decimalFormat.format(distance) + " km";
-        } else {
-            distanceText = "0" + decimalFormat.format(distance) + " km";
+        if(distance!=-1.0) {
+            if (distance >= 1) {
+                distanceText = decimalFormat.format(distance) + " km";
+            } else {
+                distanceText = "0" + decimalFormat.format(distance) + " km";
+            }
+        }else{
+            distanceText="";
         }
         if(type.equals("user")) {
             marker = mMap.addMarker(new MarkerOptions().position(position)
@@ -350,12 +354,12 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
     public Double initDistanceGoogleMatrix(URL url) throws IOException {
         StringBuffer chainResult = new StringBuffer("");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
         connection.setRequestMethod("GET");
         connection.setDoInput(true);
         connection.connect();
 
         InputStream inputStream = connection.getInputStream();
-
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
         String line = "";
         while ((line = bufferedReader.readLine()) != null) {
@@ -363,10 +367,14 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
         }
         DistanceGoogleMatrix distanceGoogleMatrix = gson.fromJson(chainResult.toString(), DistanceGoogleMatrix.class);
 
-        if (distanceGoogleMatrix.getRows()[0].elements[0].getDistance() != null) {
-            return (Double) (double) distanceGoogleMatrix.getRows()[0].elements[0].getDistance().getValue();
+        if (distanceGoogleMatrix.getStatus().equals("OK")) {
+            if(distanceGoogleMatrix.getRows()[0].elements[0].getDistance() != null) {
+                return (Double) (double) distanceGoogleMatrix.getRows()[0].elements[0].getDistance().getValue();
+            }else{
+                return -1000.0;
+            }
         } else {
-            return 0.0;
+            return -1000.0;
         }
     }
 
@@ -437,7 +445,8 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
             try {
                 URL url = null;
                 URL url2 = null;
-                String apiKeyMapDistance = "AIzaSyBnTtrn-E0kKiWVJBpAFna1sC9L6Xy9b6A";
+//                String apiKeyMapDistance = "AIzaSyBnTtrn-E0kKiWVJBpAFna1sC9L6Xy9b6A";
+                String apiKeyMapDistance="AIzaSyBZEgS-tRchA1Zg_-LPTpGLDJzybGV1amA";
                 url = new URL("https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins="
                         + params[0] + "," + params[1] + "&destinations=" + params[2] + "," + params[3] + "&mode=driving&key=" + apiKeyMapDistance);
 
@@ -453,7 +462,7 @@ public class MapEventFragment extends Fragment implements OnMapReadyCallback, Go
 
         protected void onPostExecute(Double result) {
             super.onPostExecute(result);
-            if (result < 100) {
+            if (result < 100&&result !=-1000.0) {
                 elementClosed.add(name);
                 createNotifications();
             } else {
