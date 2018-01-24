@@ -230,27 +230,28 @@ public class AddEventFragment extends Fragment {
         }
 
         if(!name.matches("") && !description.matches("") && !owner.matches("") && !address.matches("") &&
-                !startDate.matches("") && !endDate.matches("") && !startTime.matches("") && !endTime.matches("") &&
-                !startDateValue.after(endDateValue) && (startDateValue.equals(endDateValue) && !startTimeValue.after(endTimeValue))){
-            LatLng position = getLocationFromAddress(getContext(), address);
-            if(position != null){
-                SimpleDateFormat idFormat = new SimpleDateFormat("ddMMyyyyHHmmssSS");
-                Date currentDate = new Date();
-                String ID = idFormat.format(currentDate);
+                !startDate.matches("") && !endDate.matches("") && !startTime.matches("") && !endTime.matches("")){
+            if(!startDateValue.after(endDateValue) || (startDate.equals(endDate) && !startTimeValue.after(endTimeValue))){
+                LatLng position = getLocationFromAddress(getContext(), address);
+                if(position != null){
+                    SimpleDateFormat idFormat = new SimpleDateFormat("ddMMyyyyHHmmssSS");
+                    Date currentDate = new Date();
+                    String ID = idFormat.format(currentDate);
 
-                new Event(ID, name, description, address, owner, position, startDate, endDate, startTime, endTime);
+                    new Event(ID, name, description, address, owner, position, startDate, endDate, startTime, endTime);
 
-                events.child(ID).child("info").child("name").setValue(name);
-                events.child(ID).child("info").child("description").setValue(description);
-                events.child(ID).child("info").child("owner").setValue(owner);
-                events.child(ID).child("position").setValue(position);
-                events.child(ID).child("info").child("address").setValue(address);
-                events.child(ID).child("start").child("date").setValue(startDate);
-                events.child(ID).child("start").child("time").setValue(startTime);
-                events.child(ID).child("end").child("date").setValue(endDate);
-                events.child(ID).child("end").child("time").setValue(endTime);
-            } else {
-                this.alertDialog(getString(R.string.event_incorrectaddress), getString(R.string.event_incorrectaddressdesc), getString(R.string.event_ok));
+                    events.child(ID).child("info").child("name").setValue(name);
+                    events.child(ID).child("info").child("description").setValue(description);
+                    events.child(ID).child("info").child("owner").setValue(owner);
+                    events.child(ID).child("position").setValue(position);
+                    events.child(ID).child("info").child("address").setValue(address);
+                    events.child(ID).child("start").child("date").setValue(startDate);
+                    events.child(ID).child("start").child("time").setValue(startTime);
+                    events.child(ID).child("end").child("date").setValue(endDate);
+                    events.child(ID).child("end").child("time").setValue(endTime);
+                } else {
+                    this.alertDialog(getString(R.string.event_incorrectaddress), getString(R.string.event_incorrectaddressdesc), getString(R.string.event_ok));
+                }
             }
         } else {
             this.alertDialog(getString(R.string.event_incorrectfields), getString(R.string.event_incorrectfieldsdesc), getString(R.string.event_ok));
